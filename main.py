@@ -135,9 +135,12 @@ def create_app(test_config=None):
         game.TakeFromBank(getPlayer(), int(content['coins']))
         return "", 200
 
-    @app.route('/pay_to_bank/<coins>')
-    def payToBank(coins: int = None):
-        game.PayToBank(getPlayer(), coins)
+    @app.route('/pay_to_bank', methods=['POST'])
+    def payToBank():
+        content = request.json
+        if 'coins' not in content:
+            raise InvalidUsage("Coins not given", status_code=400)
+        game.PayToBank(getPlayer(), int(content['coins']))
         return "", 200
 
     @app.route('/transfer/<playerNameSrc>/<playerNameDst>/<coins>')

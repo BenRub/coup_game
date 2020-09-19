@@ -81,3 +81,18 @@ function takeFromBank() {
     xhttp.send(data);
 }
 
+function payToBank() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 200)
+                alert(this.responseText)
+        }
+    };
+    let coins = document.getElementById("txtPayToBank").value
+    xhttp.open("POST", "/pay_to_bank", true);
+    let data = JSON.stringify({"coins": coins});
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send(data);
+}
+
