@@ -90,7 +90,7 @@ class CoupGame:
         return None
 
     def OpenCard(self, player: Player, cardName):
-        card = player.GetCard(cardName)
+        card = player.GetVisibleCard(cardName)
         if not card:
             raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
         card.Visible = True
