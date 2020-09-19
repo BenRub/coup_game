@@ -50,7 +50,7 @@ class CoupGame:
         playerIndex = 0
         for player in self.playingPlayers:
             if player == self.turn:
-                return playerIndex
+                break
             playerIndex += 1
 
         if playerIndex == len(self.playingPlayers):
