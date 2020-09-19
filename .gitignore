@@ -6,3 +6,4 @@ venv
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
 deploy*
+OfirAWS.pem
