@@ -43,7 +43,7 @@ def create_app():
     def index():
         if loggedIn():
             try:
-                player = getPlayer()
+                player = getPlayer(forceTurn=False)
                 return render_template('hello.html', name=player.name)
             except InvalidUsage:
                 pass
@@ -73,7 +73,7 @@ def create_app():
     def logout():
         if not loggedIn():
             return redirect(url_for('login'))
-        player = getPlayer()
+        player = getPlayer(forceTurn=False)
         game.ExposePlayer(player)
         session.pop('playerId', None)
         return redirect(url_for('login'))
@@ -85,7 +85,7 @@ def create_app():
         player = game.GetPlayer(session['playerId'])
         return bool(player)
 
-    def getPlayer() -> Optional[Player]:
+    def getPlayer(forceTurn=True) -> Optional[Player]:
         if 'playerId' not in session:
             raise InvalidUsage("No player id in session", status_code=401)
 
@@ -93,11 +93,15 @@ def create_app():
         if not player:
             raise InvalidUsage("Game doesn't have the player id that was sent", status_code=401)
 
+        if forceTurn:
+            if game.PlayerTurn() is not player.GetId():
+                raise InvalidUsage("It's not your turn!", status_code=400)
+
         return player
 
     @app.route('/game_info')
     def gameInfo():
-        return jsonify(game.GetInfo(getPlayer())), 200
+        return jsonify(game.GetInfo(getPlayer(forceTurn=False))), 200
 
     @app.route('/start_game', methods=['POST'])
     def startGame():
@@ -106,8 +110,15 @@ def create_app():
             raise InvalidUsage("Cards names not given", status_code=400)
         if not is_list_of_strings(content['cardNames']):
             raise InvalidUsage("Cards names is not list of strings", status_code=400)
-        game.Start(content['cardNames'])
+        if 'playerToStart' not in content:
+            raise InvalidUsage("Player to start not given", status_code=400)
+        game.Start(content['cardNames'], content['playerToStart'])
         return "", 204
+
+    @app.route('/end_turn', methods=['POST'])
+    def endTurn():
+        game.EndTurn()
+        return "", 200
 
     @app.route('/open_card', methods=['POST'])
     def openCard():

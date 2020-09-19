@@ -9,6 +9,7 @@ function getGameInfo() {
             let gameInfo = ''
             gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
             gameInfo += '<div>Deck Size: ' + content['deck_size'] + '</div>'
+            gameInfo += '<div>Turn: ' + content['turn'] + '</div>'
             gameInfo += '<div class="emptyLine"></div>'
 
             document.getElementById("game_info").innerHTML = gameInfo;
@@ -43,12 +44,19 @@ function getGameInfo() {
     xhttp.send();
 }
 
-window.setInterval(getGameInfo, 2000);
+window.setInterval(getGameInfo, 1000);
 
 function startGame() {
     let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 204)
+                alert(this.responseText)
+        }
+    };
+    let playerName = document.getElementById("txtPlayerToStart").value
     xhttp.open("POST", "/start_game", true);
-    let data = JSON.stringify({"cardNames": ["capitalist", "writer", "communist", "Protestor", "Gurrialla"]});
+    let data = JSON.stringify({"cardNames": ["capitalist", "writer", "communist", "Protestor", "Gurrialla"], "playerToStart": playerName});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }
@@ -141,5 +149,18 @@ function returnCardToDeck() {
     let data = JSON.stringify({"cardName": cardName});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
+}
+
+function endTurn() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 200)
+                alert(this.responseText)
+        }
+    };
+    xhttp.open("POST", "/end_turn", true);
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send();
 }
 

@@ -10,7 +10,7 @@
 {% endif %}
 
 <div class="rootDiv">
-    <div><button type="button" onclick="startGame()">Start Game</button></div>
+    <div><button type="button" onclick="startGame()">Start Game</button><input id="txtPlayerToStart" value=""></div>
 
     <div id="game_info">
 
@@ -26,6 +26,7 @@
     <div><button type="button" onclick="transfer()">Transfer</button><input id="txtTransferSource" placeholder="from"><input id="txtTransferDst" placeholder="to"><input id="txtTransferCoins" value="0"></div>
     <div><button type="button" onclick="takeCardFromDeck()">Take card from deck</button></div>
     <div><button type="button" onclick="returnCardToDeck()">Return card to deck</button><input id="txtReturnCardToDeck" value=""></div>
+    <div><button type="button" onclick="endTurn()">End turn</button></div>
 
     <div id="players_info">
 

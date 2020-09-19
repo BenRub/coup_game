@@ -11,11 +11,20 @@ CardsForPlayer = 2
 class CoupGame:
 
     def __init__(self):
+        self.started = False
+        self.turn = None
         self.cardsNames = []
         self.players = {}
         self.deck = []
+        self.playingPlayers = []
 
-    def Start(self, cardNames):
+    def Start(self, cardNames, playerToStart):
+        player = self.getPlayerByName(playerToStart)
+        if not player:
+            raise CoupException(f"No player with name {playerToStart}")
+
+        self.started = True
+        self.turn = player
         self.cardsNames = cardNames
         self.deck = self.createCards(cardNames)
         self.shuffleDeck()
@@ -23,12 +32,30 @@ class CoupGame:
         if len(self.deck) < CardsForPlayer * len(self.players):
             raise CoupException("There are not enough cards for the players")
 
+        self.playingPlayers = []
         for _, player in self.players.items():
+            self.playingPlayers.append(player)
             player.Reset()
 
         for _ in range(CardsForPlayer):
             for _, player in self.players.items():
                 player.AddCard(self.deck.pop())
+
+    def PlayerTurn(self):
+        if self.turn:
+            return self.turn.GetId()
+        return None
+
+    def EndTurn(self):
+        playerIndex = 0
+        for player in self.playingPlayers:
+            if player == self.turn:
+                return playerIndex
+            playerIndex += 1
+
+        if playerIndex == len(self.playingPlayers):
+            playerIndex = 0
+        self.turn = self.playingPlayers[playerIndex]
 
     def GetInfo(self, player):
         playersInfo = {}
@@ -50,6 +77,7 @@ class CoupGame:
         gameInfo = {
             "cards_names": self.cardsNames,
             "deck_size": len(self.deck),
+            "turn": self.turn.GetName() if self.turn else "",
             "my_cards": playerCards,
             "my_coins": player.coins,
             "players": playersInfo
