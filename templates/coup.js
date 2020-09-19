@@ -54,14 +54,29 @@ function startGame() {
 function openCard() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            if (this.status == 400)
+        if (this.readyState === 4) {
+            if (this.status !== 200)
                 alert(this.responseText)
         }
     };
     let cardName = document.getElementById("txtCardToOpen").value
     xhttp.open("POST", "/open_card", true);
     let data = JSON.stringify({"cardName": cardName});
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send(data);
+}
+
+function takeFromBank() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 200)
+                alert(this.responseText)
+        }
+    };
+    let coins = document.getElementById("txtTakeFromBank").value
+    xhttp.open("POST", "/take_from_bank", true);
+    let data = JSON.stringify({"coins": coins});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }

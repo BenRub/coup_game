@@ -127,9 +127,12 @@ def create_app(test_config=None):
         game.ReturnCardToDeck(getPlayer(), cardName)
         return "", 200
 
-    @app.route('/take_from_bank/<coins>')
-    def takeFromBank(coins: int = None):
-        game.TakeFromBank(getPlayer(), coins)
+    @app.route('/take_from_bank', methods=['POST'])
+    def takeFromBank():
+        content = request.json
+        if 'coins' not in content:
+            raise InvalidUsage("Coins not given", status_code=400)
+        game.TakeFromBank(getPlayer(), int(content['coins']))
         return "", 200
 
     @app.route('/pay_to_bank/<coins>')
