@@ -4,8 +4,6 @@ from backend.coup_exception import CoupException
 from backend.player import Player
 import random
 
-from backend.player_game_info import PlayerGameInfo
-
 CardInstances = 3
 CardsForPlayer = 2
 
@@ -20,8 +18,11 @@ class CoupGame:
         self.deck = self.createCards(cardNames)
         self.shuffleDeck()
 
+        if len(self.deck) < CardsForPlayer * len(self.players):
+            raise CoupException("There are not enough cards for the players")
+
         for _, player in self.players.items():
-            player.cards = []
+            player.Reset()
 
         for _ in range(CardsForPlayer):
             for _, player in self.players.items():
@@ -49,7 +50,7 @@ class CoupGame:
         return cards
 
     def shuffleDeck(self):
-        self.deck = random.shuffle(self.deck)
+        random.shuffle(self.deck)
 
     def RegisterPlayer(self, name) -> Player:
         if name in self.players:
