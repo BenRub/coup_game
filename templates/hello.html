@@ -1,8 +1,17 @@
 <!doctype html>
 <title>Hello from Flask</title>
+ <script type="text/javascript"
+         src="{{ url_for('static', filename='coup.js') }}"></script>
 {% if name %}
   <h1>Hello {{ name }}!</h1>
 {% else %}
   <h1>Hello, World!</h1>
 {% endif %}
+
+
+<button type="button" onclick="startGame()">Start Game</button>
+<button type="button" onclick="loadDoc()">Change Content</button>
+<div id="game_info">
+
+</div>
 

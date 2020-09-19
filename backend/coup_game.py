@@ -20,23 +20,25 @@ class CoupGame:
         self.deck = self.createCards(cardNames)
         self.shuffleDeck()
 
-        for _, player in self.players:
+        for _, player in self.players.items():
             player.cards = []
 
         for _ in range(CardsForPlayer):
-            for _, player in self.players:
+            for _, player in self.players.items():
                 player.AddCard(self.deck.pop())
 
     def GetInfo(self, player):
-        playersInfo = []
-        for _, gamePlayer in self.players:
+        playersInfo = {}
+        for _, gamePlayer in self.players.items():
             cards = []
             for card in gamePlayer.cards:
                 if player == gamePlayer or card.Visible:
                     cards.append(card.GetName())
                 else:
                     cards.append("--HIDDEN--")
-            playersInfo.append(PlayerGameInfo(gamePlayer.GetName(), cards, gamePlayer.coins))
+            playersInfo[gamePlayer.GetName()] = {}
+            playersInfo[gamePlayer.GetName()]["cards"] = cards
+            playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
         return playersInfo
 
     def createCards(self, cardNames):
@@ -67,7 +69,7 @@ class CoupGame:
             card.Visible = True
 
     def getPlayerByName(self, playerName) -> Optional[Player]:
-        for _, player in self.players:
+        for _, player in self.players.items():
             if player.GetName() == playerName:
                 return player
         return None

@@ -36,6 +36,11 @@ def handle_invalid_usage(error: CoupException):
     return response
 
 
+@app.route('/static/coup.js')
+def coupJs():
+    return render_template('coup.js')
+
+
 @app.route('/')
 def index():
     if loggedIn():
@@ -139,4 +144,4 @@ def transfer(playerNameSrc, playerNameDst, coins: int = None):
 
 @app.route('/game_info')
 def gameInfo():
-    game.GetInfo(getPlayer())
+    return jsonify(game.GetInfo(getPlayer())), 200
