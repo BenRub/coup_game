@@ -5,35 +5,38 @@ function loadDoc() {
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let content = JSON.parse(this.response);
-            let div = '<div class="rootDiv">'
 
-            div += '<div>Cards Names: ' + content['cards_names'] + '</div>'
-            div += '<div>Deck Size: ' + content['deck_size'] + '</div>'
-            div += '<div></div>'
-            div += '<div></div>'
+            let gameInfo = ''
+            gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
+            gameInfo += '<div>Deck Size: ' + content['deck_size'] + '</div>'
+            gameInfo += '<div class="emptyLine"></div>'
 
-            div += '<div>My Cards: ' + content['my_cards'] + '</div>'
-            div += '<div>My Coins: ' + content['my_coins'] + '</div>'
-            div += '<div></div>'
-            div += '<div></div>'
+            document.getElementById("game_info").innerHTML = gameInfo;
 
-            div += '<div class="playerDiv">'
-            div += '<div class="nameDiv">Name</div>'
-            div += '<div class="cardsDiv">Cards</div>'
-            div += '<div class="coinsDiv">coins</div>'
-            div += '</div>'
+            let myInfo = ''
+            myInfo += '<div>My Cards: ' + content['my_cards'] + '</div>'
+            myInfo += '<div>My Coins: ' + content['my_coins'] + '</div>'
+            myInfo += '<div class="emptyLine"></div>'
+
+            document.getElementById("my_info").innerHTML = myInfo;
+
+            let playersInfo = '<table border="1">'
+            playersInfo += '<tr>'
+            playersInfo += '<td class="nameDiv">Name</td>'
+            playersInfo += '<td class="cardsDiv">Cards</td>'
+            playersInfo += '<td class="coinsDiv">coins</td>'
+            playersInfo += '</tr>'
             for (let playerName in content['players']) {
                 let player = content['players'][playerName]
-                div += '<div class="playerDiv">'
-                div += '<div class="nameDiv">' + playerName + '</div>'
-                div += '<div class="cardsDiv">' + player['cards'] + '</div>'
-                div += '<div class="coinsDiv">' + player['coins'] + '</div>'
-                div += '</div>'
+                playersInfo += '<tr>'
+                playersInfo += '<td class="nameDiv">' + playerName + '</td>'
+                playersInfo += '<td class="cardsDiv">' + player['cards'] + '</td>'
+                playersInfo += '<td class="coinsDiv">' + player['coins'] + '</td>'
+                playersInfo += '</tr>'
             }
+            playersInfo += '</table>'
 
-            div += '</div>'
-
-            document.getElementById("game_info").innerHTML = div;
+            document.getElementById("players_info").innerHTML = playersInfo;
         }
     };
     xhttp.open("GET", "/game_info", true);

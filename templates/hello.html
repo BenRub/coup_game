@@ -1,5 +1,6 @@
 <!doctype html>
 <title>Hello from Flask</title>
+ <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles.css') }}">
  <script type="text/javascript"
          src="{{ url_for('static', filename='coup.js') }}"></script>
 {% if name %}
@@ -8,11 +9,24 @@
   <h1>Hello, World!</h1>
 {% endif %}
 
-<div><button type="button" onclick="loadDoc()">Change Content</button></div>
-<div><button type="button" onclick="startGame()">Start Game</button></div>
-<div><button type="button" onclick="openCard()">Open Card</button><input id="txtCardToOpen" value=""></div>
+<div class="rootDiv">
+    <div><button type="button" onclick="startGame()">Start Game</button></div>
 
-<div id="game_info">
+    <div id="game_info">
+
+    </div>
+
+    <div><button type="button" onclick="loadDoc()">Change Content</button></div>
+
+    <div id="my_info">
+
+    </div>
+
+    <div><button type="button" onclick="openCard()">Open Card</button><input id="txtCardToOpen" value=""></div>
+
+    <div id="players_info">
+
+    </div>
 
 </div>
 

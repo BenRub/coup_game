@@ -13,6 +13,7 @@ from invalid_usage import InvalidUsage
 from flask import jsonify
 
 from utils import is_list_of_strings
+from flask import Response
 
 
 def create_app(test_config=None):
@@ -32,6 +33,11 @@ def create_app(test_config=None):
     @app.route('/static/coup.js', methods=['GET'])
     def coupJs():
         return render_template('coup.js')
+
+    @app.route('/static/styles.css', methods=['GET'])
+    def stylesCss():
+        css = render_template('styles.css')
+        return Response(css, mimetype='text/css')
 
     @app.route('/')
     def index():
