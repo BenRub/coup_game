@@ -1,4 +1,4 @@
-function loadDoc() {
+function getGameInfo() {
     let xhttp = new XMLHttpRequest();
 
 
@@ -42,6 +42,8 @@ function loadDoc() {
     xhttp.open("GET", "/game_info", true);
     xhttp.send();
 }
+
+window.setInterval(getGameInfo, 2000);
 
 function startGame() {
     let xhttp = new XMLHttpRequest();
