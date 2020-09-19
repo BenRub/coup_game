@@ -23,13 +23,13 @@ class Player:
 
     def GetCard(self, cardName) -> Optional[Card]:
         for card in self.cards:
-            if card.GetName() == cardName:
+            if card.GetName().lower() == cardName.lower():
                 return card
         return None
 
     def GetVisibleCard(self, cardName) -> Optional[Card]:
         for card in self.cards:
-            if card.GetName() == cardName and not card.Visible:
+            if card.GetName().lower() == cardName.lower() and not card.Visible:
                 return card
         return None
 

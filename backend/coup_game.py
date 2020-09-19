@@ -113,7 +113,7 @@ class CoupGame:
 
     def getPlayerByName(self, playerName) -> Optional[Player]:
         for _, player in self.players.items():
-            if player.GetName() == playerName:
+            if player.GetName().lower() == playerName.lower():
                 return player
         return None
 
