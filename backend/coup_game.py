@@ -136,6 +136,7 @@ class CoupGame:
             raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
 
         if card.Visible:
+            player.AddCard(card)
             raise CoupException(f"Card {cardName} is visible & can't be returned to deck")
 
         self.deck.append(card)
