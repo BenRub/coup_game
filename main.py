@@ -143,7 +143,7 @@ def create_app():
         game.PayToBank(getPlayer(), int(content['coins']))
         return "", 200
 
-    @app.route('/transfer')
+    @app.route('/transfer', methods=['POST'])
     def transfer():
         content = request.json
         if 'player_name_src' not in content:
