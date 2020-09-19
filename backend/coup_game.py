@@ -46,7 +46,10 @@ class CoupGame:
             return self.turn.GetId()
         return None
 
-    def EndTurn(self):
+    def EndTurn(self, player: Player):
+        if self.turn is not player:
+            raise CoupException("It's not your turn!")
+
         playerIndex = 0
         for player in self.playingPlayers:
             if player == self.turn:
