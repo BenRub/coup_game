@@ -1,16 +1,34 @@
 from typing import Optional
 from backend.card import Card
+from backend.coup_exception import CoupException
 from backend.player import Player
 import random
+
+from backend.player_game_info import PlayerGameInfo
+
 CardInstances = 3
 
 
 class CoupGame:
 
-    def __init__(self, cardNames):
+    def __init__(self):
+        self.players = {}
+        self.deck = []
+
+    def Start(self, cardNames):
         self.players = {}
         self.deck = self.createCards(cardNames)
         self.shuffleDeck()
+
+    def GetInfo(self, player):
+        playersInfo = []
+        for _, gamePlayer in self.players:
+            cards = []
+            for card in gamePlayer.cards:
+                if player == gamePlayer or card.Visible:
+                    cards.append(card.GetName())
+            playersInfo.append(PlayerGameInfo(gamePlayer.GetName(), cards, gamePlayer.coins))
+        return playersInfo
 
     def createCards(self, cardNames):
         cards = []
@@ -45,12 +63,12 @@ class CoupGame:
     def OpenCard(self, player: Player, cardName):
         card = player.GetCard(cardName)
         if not card:
-            raise Exception(f"Player {player.GetName()} does not have card {cardName}")
+            raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
         card.Visible = True
 
     def TakeCardFromDeck(self, player: Player) -> Card:
         if len(self.deck) <= 0:
-            raise Exception("Deck is empty")
+            raise CoupException("Deck is empty")
 
         card = self.deck.pop()
         player.AddCard(card)
@@ -59,7 +77,7 @@ class CoupGame:
     def ReturnCardToDeck(self, player: Player, cardName):
         card = player.PopCard(cardName)
         if not card:
-            raise Exception(f"Player {player.GetName()} does not have card {cardName}")
+            raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
 
         self.deck.append(card)
         self.shuffleDeck()
@@ -69,20 +87,20 @@ class CoupGame:
 
     def PayToBank(self, player: Player, coins: int):
         if player.coins < coins:
-            raise Exception(f"Player {player.GetName()} does not have {coins} coins")
+            raise CoupException(f"Player {player.GetName()} does not have {coins} coins")
         player.coins -= coins
 
     def Transfer(self, playerNameSrc, playerNameDst, coins: int):
         playerSrc = self.getPlayerByName(playerNameSrc)
         if not playerSrc:
-            raise Exception(f"No player with name {playerNameSrc}")
+            raise CoupException(f"No player with name {playerNameSrc}")
 
         playerDst = self.getPlayerByName(playerNameDst)
         if not playerDst:
-            raise Exception(f"No player with name {playerNameDst}")
+            raise CoupException(f"No player with name {playerNameDst}")
 
         if playerSrc.coins < coins:
-            raise Exception(f"Player {playerSrc.GetName()} does not have {coins} coins")
+            raise CoupException(f"Player {playerSrc.GetName()} does not have {coins} coins")
 
         playerSrc.coins -= coins
         playerDst.coins += coins
