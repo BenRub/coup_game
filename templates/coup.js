@@ -13,7 +13,7 @@ function loadDoc() {
 function startGame() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("POST", "/start_game", true);
-  let data = JSON.stringify({"cardNames": ["capitalist", "writer", "sexier"]});
+  let data = JSON.stringify({"cardNames": ["capitalist", "writer", "communist", "Protestor", "Gurrialla"]});
   xhttp.setRequestHeader("content-type", "application/json")
   xhttp.send(data);
 }
