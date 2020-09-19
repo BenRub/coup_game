@@ -1,9 +1,10 @@
 from typing import Optional
 
-from flask import Flask
+from flask import Flask, url_for
 from flask import render_template
 from flask import session
 from flask import request
+from flask import redirect
 
 from backend.coup_exception import CoupException
 from backend.coup_game import CoupGame
@@ -14,6 +15,10 @@ from flask import jsonify
 from utils import is_list_of_strings
 
 app = Flask(__name__)
+
+# Set the secret key to some random bytes. Keep this really secret!
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 game = CoupGame()
 
 
@@ -31,25 +36,54 @@ def handle_invalid_usage(error: CoupException):
     return response
 
 
-@app.route('/start_game', methods=['POST'])
-def startGame():
-    content = request.json
-    if 'cardNames' not in content:
-        raise InvalidUsage("Cards names not given", status_code=400)
-    if not is_list_of_strings(content['cardNames']):
-        raise InvalidUsage("Cards names is not list of strings", status_code=400)
-    game.Start(content['cardNames'])
+@app.route('/')
+def index():
+    if loggedIn():
+        try:
+            player = getPlayer()
+            return render_template('hello.html', name=player.name)
+        except InvalidUsage:
+            pass
+    return redirect(url_for('login'))
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return 'Please Login'
+    if request.method == 'POST':
+        if loggedIn():
+            return redirect(url_for('index'))
+
+        try:
+            player = game.RegisterPlayer(request.form['username'])
+            session['playerId'] = player.id
+            return redirect(url_for('index'))
+        except CoupException as e:
+            return e.message, 401
+
+    return '''
+        <form method="post">
+            <p><input type=text name=username>
+            <p><input type=submit value=Login>
+        </form>
+    '''
 
 
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
+@app.route('/logout')
+def logout():
+    if not loggedIn():
+        return redirect(url_for('login'))
+    player = getPlayer()
+    game.ExposePlayer(player)
+    session.pop('playerId', None)
+    return redirect(url_for('login'))
+
+
+def loggedIn() -> bool:
+    if 'playerId' not in session:
+        return False
+
+    player = game.GetPlayer(session['playerId'])
+    return bool(player)
 
 
 def getPlayer() -> Optional[Player]:
@@ -63,14 +97,19 @@ def getPlayer() -> Optional[Player]:
     return player
 
 
+@app.route('/start_game', methods=['POST'])
+def startGame():
+    content = request.json
+    if 'cardNames' not in content:
+        raise InvalidUsage("Cards names not given", status_code=400)
+    if not is_list_of_strings(content['cardNames']):
+        raise InvalidUsage("Cards names is not list of strings", status_code=400)
+    game.Start(content['cardNames'])
+
+
 @app.route('/open_card/<name>')
 def openCard(name=None):
     game.OpenCard(getPlayer(), name)
-
-
-@app.route('/open_card/<cardName>')
-def openCard(cardName=None):
-    game.OpenCard(getPlayer(), cardName)
 
 
 @app.route('/take_card_from_deck')
@@ -99,5 +138,5 @@ def transfer(playerNameSrc, playerNameDst, coins: int = None):
 
 
 @app.route('/game_info')
-def transfer():
+def gameInfo():
     game.GetInfo(getPlayer())

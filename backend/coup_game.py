@@ -7,6 +7,7 @@ import random
 from backend.player_game_info import PlayerGameInfo
 
 CardInstances = 3
+CardsForPlayer = 2
 
 
 class CoupGame:
@@ -16,9 +17,15 @@ class CoupGame:
         self.deck = []
 
     def Start(self, cardNames):
-        self.players = {}
         self.deck = self.createCards(cardNames)
         self.shuffleDeck()
+
+        for _, player in self.players:
+            player.cards = []
+
+        for _ in range(CardsForPlayer):
+            for _, player in self.players:
+                player.AddCard(self.deck.pop())
 
     def GetInfo(self, player):
         playersInfo = []
@@ -27,6 +34,8 @@ class CoupGame:
             for card in gamePlayer.cards:
                 if player == gamePlayer or card.Visible:
                     cards.append(card.GetName())
+                else:
+                    cards.append("--HIDDEN--")
             playersInfo.append(PlayerGameInfo(gamePlayer.GetName(), cards, gamePlayer.coins))
         return playersInfo
 
@@ -40,10 +49,9 @@ class CoupGame:
     def shuffleDeck(self):
         self.deck = random.shuffle(self.deck)
 
-    def RegisterPlayer(self, name):
-        for player in self.players:
-            if player.GetName() == name:
-                return None
+    def RegisterPlayer(self, name) -> Player:
+        if name in self.players:
+            raise CoupException(f"{name} is already in the game")
 
         player = Player(name)
         self.players[player.GetId()] = player
@@ -53,6 +61,10 @@ class CoupGame:
         if playerId in self.players:
             return self.players[playerId]
         return None
+
+    def ExposePlayer(self, player: Player):
+        for _, card in player.cards:
+            card.Visible = True
 
     def getPlayerByName(self, playerName) -> Optional[Player]:
         for _, player in self.players:
@@ -78,6 +90,9 @@ class CoupGame:
         card = player.PopCard(cardName)
         if not card:
             raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
+
+        if card.Visible:
+            raise CoupException(f"Card {cardName} is visible & can't be returned to deck")
 
         self.deck.append(card)
         self.shuffleDeck()
