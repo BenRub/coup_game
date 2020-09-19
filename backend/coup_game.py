@@ -53,9 +53,9 @@ class CoupGame:
                 break
             playerIndex += 1
 
-        if playerIndex == len(self.playingPlayers):
-            playerIndex = 0
-        self.turn = self.playingPlayers[playerIndex]
+        if playerIndex + 1 == len(self.playingPlayers):
+            playerIndex = -1
+        self.turn = self.playingPlayers[playerIndex + 1]
 
     def GetInfo(self, player):
         playersInfo = {}
