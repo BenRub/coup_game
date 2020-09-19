@@ -113,3 +113,31 @@ function transfer() {
     xhttp.send(data);
 }
 
+function takeCardFromDeck() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 200)
+                alert(this.responseText)
+        }
+    };
+    xhttp.open("POST", "/take_card_from_deck", true);
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send();
+}
+
+function returnCardToDeck() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 200)
+                alert(this.responseText)
+        }
+    };
+    let cardName = document.getElementById("txtReturnCardToDeck").value
+    xhttp.open("POST", "/return_card_to_deck", true);
+    let data = JSON.stringify({"cardName": cardName});
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send(data);
+}
+

@@ -95,13 +95,12 @@ class CoupGame:
             raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
         card.Visible = True
 
-    def TakeCardFromDeck(self, player: Player) -> Card:
+    def TakeCardFromDeck(self, player: Player):
         if len(self.deck) <= 0:
             raise CoupException("Deck is empty")
 
         card = self.deck.pop()
         player.AddCard(card)
-        return card
 
     def ReturnCardToDeck(self, player: Player, cardName):
         card = player.PopCard(cardName)

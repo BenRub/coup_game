@@ -117,14 +117,17 @@ def create_app():
         game.OpenCard(getPlayer(), content['cardName'])
         return "", 200
 
-    @app.route('/take_card_from_deck')
+    @app.route('/take_card_from_deck', methods=['POST'])
     def takeCardFromDeck():
-        card = game.TakeCardFromDeck(getPlayer())
+        game.TakeCardFromDeck(getPlayer())
         return "", 200
 
-    @app.route('/return_card_to_deck/<cardName>')
-    def returnCardToDeck(cardName=None):
-        game.ReturnCardToDeck(getPlayer(), cardName)
+    @app.route('/return_card_to_deck', methods=['POST'])
+    def returnCardToDeck():
+        content = request.json
+        if 'cardName' not in content:
+            raise InvalidUsage("Card name not given", status_code=400)
+        game.ReturnCardToDeck(getPlayer(), content['cardName'])
         return "", 200
 
     @app.route('/take_from_bank', methods=['POST'])
