@@ -8,8 +8,12 @@ class Player:
     def __init__(self, name):
         self.id = str(uuid.uuid4())
         self.name = name
-        self.cards = {}
+        self.cards = []
+        self.coins = 0
+
+    def Reset(self):
         self.coins = 2
+        self.cards = []
 
     def GetId(self):
         return self.id
@@ -18,16 +22,24 @@ class Player:
         return self.name
 
     def GetCard(self, cardName) -> Optional[Card]:
-        if cardName in self.cards:
-            return self.cards[cardName]
+        for card in self.cards:
+            if card.GetName() == cardName:
+                return card
         return None
 
     def AddCard(self, card):
-        self.cards[card.GetName()] = card
+        self.cards.append(card)
 
     def PopCard(self, cardName):
-        card = self.GetCard(cardName)
-        if not card:
+        cardToPop = self.GetCard(cardName)
+        if not cardToPop:
             return None
-        del self.cards[cardName]
-        return card
+
+        newCards = []
+        for card in self.cards:
+            if card is not cardToPop:
+                newCards.append(card)
+
+        self.cards = newCards
+
+        return cardToPop
