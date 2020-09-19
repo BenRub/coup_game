@@ -110,6 +110,7 @@ def startGame():
     if not is_list_of_strings(content['cardNames']):
         raise InvalidUsage("Cards names is not list of strings", status_code=400)
     game.Start(content['cardNames'])
+    return "", 204
 
 
 @app.route('/open_card/<name>')
