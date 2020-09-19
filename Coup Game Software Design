@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-09-19T16:13:09.685Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36" etag="ROe09JHDl_pjLk7kze_c" version="13.7.3" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2020-09-19T16:13:19.198Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36" etag="0P1jmdklqslYVevNCeTJ" version="13.7.3" type="github" pages="2">
   <diagram id="vPHFjCsjQievnAYKGfXm" name="API">
     <mxGraphModel dx="1426" dy="726" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -91,7 +91,7 @@
         <mxCell id="O6KIaTh5sQyWhUsd2gfg-1" value="private void initGame()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="E1coycsNsRGHzhnSKLO4-4">
           <mxGeometry y="164" width="400" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="O6KIaTh5sQyWhUsd2gfg-19" value="void openCard(int playerId, String name)&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="E1coycsNsRGHzhnSKLO4-4">
+        <mxCell id="O6KIaTh5sQyWhUsd2gfg-19" value="void openCard(int playerId, String cardName)&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="E1coycsNsRGHzhnSKLO4-4">
           <mxGeometry y="190" width="400" height="26" as="geometry" />
         </mxCell>
         <mxCell id="O6KIaTh5sQyWhUsd2gfg-30" value="void bankTransferCoins(int coins)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="E1coycsNsRGHzhnSKLO4-4">
