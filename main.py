@@ -61,7 +61,6 @@ def login():
         try:
             player = game.RegisterPlayer(request.form['username'])
             session['playerId'] = player.id
-            return redirect(url_for('index'))
         except CoupException as e:
             return e.message, 401
 
