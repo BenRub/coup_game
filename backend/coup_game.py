@@ -35,7 +35,7 @@ class CoupGame:
         for _, gamePlayer in self.players.items():
             cards = []
             for card in gamePlayer.cards:
-                if player == gamePlayer or card.Visible:
+                if card.Visible:
                     cards.append(card.GetName())
                 else:
                     cards.append("--HIDDEN--")
@@ -43,7 +43,17 @@ class CoupGame:
             playersInfo[gamePlayer.GetName()]["cards"] = cards
             playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
 
-        gameInfo = {"cards_names": self.cardsNames, "deck_size": len(self.deck), "players": playersInfo}
+        playerCards = []
+        for card in player.cards:
+            playerCards.append(card.name)
+
+        gameInfo = {
+            "cards_names": self.cardsNames,
+            "deck_size": len(self.deck),
+            "my_cards": playerCards,
+            "my_coins": player.coins,
+            "players": playersInfo
+        }
         return gameInfo
 
     def createCards(self, cardNames):

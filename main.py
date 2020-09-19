@@ -114,7 +114,7 @@ def create_app(test_config=None):
     @app.route('/take_card_from_deck')
     def takeCardFromDeck():
         card = game.TakeCardFromDeck(getPlayer())
-        return card.GetName(), 200
+        return "", 200
 
     @app.route('/return_card_to_deck/<cardName>')
     def returnCardToDeck(cardName=None):
