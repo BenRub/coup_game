@@ -27,6 +27,12 @@ class Player:
                 return card
         return None
 
+    def GetVisibleCard(self, cardName) -> Optional[Card]:
+        for card in self.cards:
+            if card.GetName() == cardName and not card.Visible:
+                return card
+        return None
+
     def AddCard(self, card):
         self.cards.append(card)
 
