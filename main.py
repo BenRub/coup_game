@@ -23,15 +23,11 @@ def create_app(test_config=None):
 
     @app.errorhandler(InvalidUsage)
     def handle_invalid_usage(error: InvalidUsage):
-        response = jsonify(error.to_dict())
-        response.status_code = error.status_code
-        return response
+        return error.message, error.status_code
 
     @app.errorhandler(CoupException)
     def handle_invalid_usage(error: CoupException):
-        response = jsonify(error.to_dict())
-        response.status_code = 400
-        return response
+        return error.message, 400
 
     @app.route('/static/coup.js', methods=['GET'])
     def coupJs():
@@ -93,6 +89,10 @@ def create_app(test_config=None):
 
         return player
 
+    @app.route('/game_info')
+    def gameInfo():
+        return jsonify(game.GetInfo(getPlayer())), 200
+
     @app.route('/start_game', methods=['POST'])
     def startGame():
         content = request.json
@@ -103,32 +103,37 @@ def create_app(test_config=None):
         game.Start(content['cardNames'])
         return "", 204
 
-    @app.route('/open_card/<name>')
-    def openCard(name=None):
-        game.OpenCard(getPlayer(), name)
+    @app.route('/open_card', methods=['POST'])
+    def openCard():
+        content = request.json
+        if 'cardName' not in content:
+            raise InvalidUsage("Card name not given", status_code=400)
+        game.OpenCard(getPlayer(), content['cardName'])
+        return "", 200
 
     @app.route('/take_card_from_deck')
     def takeCardFromDeck():
-        game.TakeCardFromDeck(getPlayer())
+        card = game.TakeCardFromDeck(getPlayer())
+        return card.GetName(), 200
 
     @app.route('/return_card_to_deck/<cardName>')
     def returnCardToDeck(cardName=None):
         game.ReturnCardToDeck(getPlayer(), cardName)
+        return "", 200
 
     @app.route('/take_from_bank/<coins>')
     def takeFromBank(coins: int = None):
         game.TakeFromBank(getPlayer(), coins)
+        return "", 200
 
     @app.route('/pay_to_bank/<coins>')
     def payToBank(coins: int = None):
         game.PayToBank(getPlayer(), coins)
+        return "", 200
 
     @app.route('/transfer/<playerNameSrc>/<playerNameDst>/<coins>')
     def transfer(playerNameSrc, playerNameDst, coins: int = None):
         game.Transfer(playerNameSrc, playerNameDst, coins)
-
-    @app.route('/game_info')
-    def gameInfo():
-        return jsonify(game.GetInfo(getPlayer())), 200
+        return "", 200
 
     return app

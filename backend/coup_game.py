@@ -11,10 +11,12 @@ CardsForPlayer = 2
 class CoupGame:
 
     def __init__(self):
+        self.cardsNames = []
         self.players = {}
         self.deck = []
 
     def Start(self, cardNames):
+        self.cardsNames = cardNames
         self.deck = self.createCards(cardNames)
         self.shuffleDeck()
 
@@ -40,7 +42,9 @@ class CoupGame:
             playersInfo[gamePlayer.GetName()] = {}
             playersInfo[gamePlayer.GetName()]["cards"] = cards
             playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
-        return playersInfo
+
+        gameInfo = {"cards_names": self.cardsNames, "deck_size": len(self.deck), "players": playersInfo}
+        return gameInfo
 
     def createCards(self, cardNames):
         cards = []
