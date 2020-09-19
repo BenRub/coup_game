@@ -96,3 +96,20 @@ function payToBank() {
     xhttp.send(data);
 }
 
+function transfer() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 200)
+                alert(this.responseText)
+        }
+    };
+    let player_name_src = document.getElementById("txtTransferSource").value;
+    let player_name_dst = document.getElementById("txtTransferDst").value;
+    let coins = document.getElementById("txtTransferCoins").value;
+    xhttp.open("POST", "/transfer", true);
+    let data = JSON.stringify({"player_name_src": player_name_src, "player_name_dst":player_name_dst, "coins": coins});
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send(data);
+}
+

@@ -16,7 +16,7 @@ from utils import is_list_of_strings
 from flask import Response
 
 
-def create_app(test_config=None):
+def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -143,9 +143,16 @@ def create_app(test_config=None):
         game.PayToBank(getPlayer(), int(content['coins']))
         return "", 200
 
-    @app.route('/transfer/<playerNameSrc>/<playerNameDst>/<coins>')
-    def transfer(playerNameSrc, playerNameDst, coins: int = None):
-        game.Transfer(playerNameSrc, playerNameDst, coins)
+    @app.route('/transfer')
+    def transfer():
+        content = request.json
+        if 'player_name_src' not in content:
+            raise InvalidUsage("Player source not given", status_code=400)
+        if 'player_name_dst' not in content:
+            raise InvalidUsage("Player source not given", status_code=400)
+        if 'coins' not in content:
+            raise InvalidUsage("Coins not given", status_code=400)
+        game.Transfer(content['player_name_src'], content['player_name_dst'], int(content['coins']))
         return "", 200
 
     return app
