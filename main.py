@@ -36,7 +36,7 @@ def handle_invalid_usage(error: CoupException):
     return response
 
 
-@app.route('/static/coup.js')
+@app.route('/static/coup.js', methods=['GET'])
 def coupJs():
     return render_template('coup.js')
 
