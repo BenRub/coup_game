@@ -20,6 +20,7 @@
         <div class="hello">
             {% if name %}
                 Hello {{ name }}! (<a href="/logout">Logout</a>)
+                <button type="button" onclick="endTurn()">End turn</button>
             {% else %}
                 Who are you? (<a href="/logout">Logout</a>)
             {% endif %}
@@ -63,10 +64,6 @@
 
     <div id="game_info">
 
-    </div>
-
-    <div>
-        <button type="button" onclick="endTurn()">End turn</button>
     </div>
 
     <div id="playing_players">
