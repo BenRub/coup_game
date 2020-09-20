@@ -7,9 +7,8 @@ function startGame() {
         }
     };
     let playerName = document.getElementById("listOfPlayers").value
-    let cardNames = getSelectValues(document.getElementById("cardNames"))
     xhttp.open("POST", "/start_game", true);
-    let data = JSON.stringify({"cardNames": cardNames, "playerToStart": playerName});
+    let data = JSON.stringify({"cardNames": getSelectedCards(), "playerToStart": playerName});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }

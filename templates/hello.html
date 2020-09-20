@@ -1,9 +1,17 @@
 <!doctype html>
 <title>Hello from Flask</title>
  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ appTimestamp }}">
+ <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='popup.css') }}?v={{ appTimestamp }}">
  <script type="text/javascript" src="{{ url_for('static', filename='coup_api.js') }}?v={{ appTimestamp }}"></script>
- <script type="text/javascript" src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
  <script type="text/javascript" src="{{ url_for('static', filename='coup_update.js') }}?v={{ appTimestamp }}"></script>
+ <script type="text/javascript" src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
+
+<div id="allCards" class="allCardsClosed">
+    <div style="margin: auto;width:80px;color:blue;" onclick="closeCardsPopup()">Close</div>
+    <table style="margin: auto;" id="cardsTable">
+
+    </table>
+</div>
 
 <div class="rootDiv">
 
@@ -21,13 +29,7 @@
             Player to start:
             <select id="listOfPlayers">
             </select>
-            <select id="cardNames" multiple="multiple">
-                <option>Capitalist</option>
-                <option>Communist</option>
-                <option>Guerrilla</option>
-                <option>Writer</option>
-                <option>Protester</option>
-            </select>
+            <button type="button" onclick="openCardsPopup()">Change Cards</button>
             <button type="button" onclick="startGame()">Start Game</button>
         </div>
 

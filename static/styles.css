@@ -5,6 +5,63 @@ body {
     font-family: Arial, serif;
 }
 
+#allCards {
+    position: absolute;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 80%;
+    height: 80%;
+    background: white;
+    border: 1px solid black;
+    border-radius: 2px;
+    bottom: 10%;
+    left: 10%;
+    z-index: 100;
+}
+
+.allCardsClosed {
+    visibility: hidden;
+}
+
+.allCardsOpen {
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+    visibility: visible;
+}
+
+#allCards img {
+    object-fit: contain;
+    width: 245px;
+    height: 175px;
+}
+
+#allCards img.selected {
+    border: 3px solid orange;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .rootDiv {
     width: 100%;
 }
@@ -29,6 +86,10 @@ body {
     margin-right: 5px;
 }
 
+#cardNames {
+    visibility: collapse;
+}
+
 .header a {
     color: #a4a4cd;
     text-decoration: none;
@@ -37,7 +98,7 @@ body {
 .my_info {
     width: 100%;
     margin-top: 5px;
-    height: 255px;
+    height: 217px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -60,8 +121,8 @@ body {
 }
 
 .my_cards .card {
-    width: 271px;
-    height: 435px;
+    width: 135px;
+    height: 217px;
     background-repeat: no-repeat;
     background-size: contain;
     margin-left: 2px;
@@ -69,15 +130,15 @@ body {
 }
 
 .my_cards .capitalist {
-    background-image: url("/static/cards_images/capitalist.jpeg") ;
+    background-image: url("/static/cards_images/capitalist.jpeg");
 }
 
 .my_cards .communist {
-    background-image: url("/static/cards_images/communist.jpeg") ;
+    background-image: url("/static/cards_images/communist.jpeg");
 }
 
 .my_cards .guerrilla {
-    background-image: url("/static/cards_images/guerrilla.jpeg") ;
+    background-image: url("/static/cards_images/guerrilla.jpeg");
 }
 
 .my_cards .protester {
