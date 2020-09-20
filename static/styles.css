@@ -44,28 +44,28 @@ body {
 }
 
 .my_cards .card {
-    width: 159px;
-    height: 255px;
+    width: 271px;
+    height: 435px;
     background-repeat: no-repeat;
     background-size: contain;
     margin-left: 2px;
     margin-right: 2px;
 }
 
-.my_cards .banker {
-    background-image: url("/static/cards_images/banker.jpeg") ;
-}
-
 .my_cards .capitalist {
     background-image: url("/static/cards_images/capitalist.jpeg") ;
 }
 
-.my_cards .crimeboss {
-    background-image: url("/static/cards_images/crimeboss.jpeg") ;
+.my_cards .communist {
+    background-image: url("/static/cards_images/communist.jpeg") ;
 }
 
-.my_cards .director {
-    background-image: url("/static/cards_images/director.jpeg") ;
+.my_cards .guerrilla {
+    background-image: url("/static/cards_images/guerrilla.jpeg") ;
+}
+
+.my_cards .protester {
+    background-image: url("/static/cards_images/protester.jpeg");
 }
 
 .my_cards .writer {
