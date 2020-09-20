@@ -61,9 +61,9 @@ class CoupGame:
         self.turn = self.playingPlayers[playerIndex + 1]
 
     def GetInfo(self, player):
-        allPlayers = []
+        allPlayers = {}
         for _, user in self.players.items():
-            allPlayers.append(user.GetName())
+            allPlayers[user.GetName()] = ""
 
         playersInfo = {}
         for gamePlayer in self.playingPlayers:

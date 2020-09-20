@@ -1,41 +1,29 @@
+let cbListOfPlayers = undefined
+let myPlayersOptions = {}
+
 function updateAllPlayersNames(allPlayersJson) {
-    for (let playerNameIndex in all_players_names) {
-        let playerName = all_players_names[playerNameIndex]
-        let found = false
-        for (let parsedPlayerNameIndex in allPlayersJson) {
-            let parsedPlayerName = allPlayersJson[parsedPlayerNameIndex]
-            if (parsedPlayerName === playerName) {
-                found = true
-                break
-            }
-        }
+    if (cbListOfPlayers === undefined) {
+        cbListOfPlayers = document.getElementById("listOfPlayers")
+    }
 
-        if (!found) {
-            document.getElementById("player_option_" + playerName).remove()
+    for (let playerNameLocal in myPlayersOptions) {
+        if (!(playerNameLocal in allPlayersJson)) {
+            console.log("why1")
+            myPlayersOptions[playerNameLocal].remove()
+            delete myPlayersOptions[playerNameLocal]
         }
     }
 
-    let cbListOfPlayers = document.getElementById("listOfPlayers")
-    for (let parsedPlayerNameIndex in allPlayersJson) {
-        let parsedPlayerName = allPlayersJson[parsedPlayerNameIndex]
-        let found = false
-        for (let playerNameIndex in all_players_names) {
-            let playerName = all_players_names[playerNameIndex]
-            if (parsedPlayerName === playerName) {
-                found = true
-                break
-            }
+    for (let parsedPlayerName in allPlayersJson) {
+        if (parsedPlayerName in myPlayersOptions) {
+            continue
         }
-
-        if (!found) {
-            let option = document.createElement("option");
-            option.innerText = parsedPlayerName
-            option.id = "player_option_" + parsedPlayerName
-            cbListOfPlayers.appendChild(option)
-        }
+        console.log("why2")
+        let option = document.createElement("option");
+        option.innerText = parsedPlayerName
+        myPlayersOptions[parsedPlayerName] = option
+        cbListOfPlayers.appendChild(option)
     }
-
-    all_players_names = allPlayersJson
 }
 
 function updateDeckData(content) {
@@ -50,9 +38,7 @@ function updateDeckData(content) {
 }
 
 let myCardsElem = undefined
-let myCardsElements = {
-
-}
+let myCardsElements = {}
 
 function updateMyCards(myCardsJson) {
     if (myCardsElem === undefined) {
@@ -93,6 +79,14 @@ function updateMyCards(myCardsJson) {
     }
 }
 
+function updateMyCoins(myCoins) {
+    let threeCoinsAmount = Math.floor(myCoins / 3)
+    let oneCoinAmount = myCoins - 3 * threeCoinsAmount
+
+    document.getElementById("oneCoinAmount").innerText = oneCoinAmount + ""
+    document.getElementById("threeCoinsAmount").innerText = threeCoinsAmount + ""
+}
+
 function getGameInfo() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -102,13 +96,7 @@ function getGameInfo() {
             updateAllPlayersNames(content['all_players'])
             updateDeckData(content)
             updateMyCards(content['my_cards'])
-
-
-            let threeCoinsAmount = Math.floor(content['my_coins'] / 3)
-            let oneCoinAmount = content['my_coins'] - 3 * threeCoinsAmount
-
-            document.getElementById("oneCoinAmount").innerText = oneCoinAmount + ""
-            document.getElementById("threeCoinsAmount").innerText = threeCoinsAmount + ""
+            updateMyCoins(content['my_coins'])
 
             let playersInfo = '<table border="1">'
             playersInfo += '<tr>'
