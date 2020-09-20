@@ -40,7 +40,7 @@
 
         </div>
 
-        <div id="my_coins" class="my_coins">
+        <div id="my_coins" class="my_coins" draggable="true" ondragstart="dragCoinsFromMyself(event)" ondrop="dropToCoins(event)" ondragover="allowDrop(event)">
             <div><span id="oneCoinAmount">0</span> X <img src="/static/one_coin.png" /></div>
             <div><span id="threeCoinsAmount">0</span> X <img src="/static/three_coins.png" /></div>
         </div>
@@ -52,15 +52,13 @@
         <div class="deck" draggable="true" ondragstart="dragCardFromDeck(event)" ondrop="dropToDeck(event)" ondragover="allowDrop(event)">
             <span id="deckSize"></span>
         </div>
-        <div class="bank"></div>
+        <div class="bank" draggable="true" ondragstart="dragCoinsFromBank(event)" ondrop="dropToBank(event)" ondragover="allowDrop(event)" onclick="takeOneFromBank()"></div>
     </div>
 
     <div id="game_info">
 
     </div>
 
-    <div><button type="button" onclick="takeFromBank()">Take From Bank</button><input id="txtTakeFromBank" value="0"></div>
-    <div><button type="button" onclick="payToBank()">Pay to Bank</button><input id="txtPayToBank" value="0"></div>
     <div><button type="button" onclick="transfer()">Transfer</button><input id="txtTransferSource" placeholder="from"><input id="txtTransferDst" placeholder="to"><input id="txtTransferCoins" value="0"></div>
     <div><button type="button" onclick="endTurn()">End turn</button></div>
 

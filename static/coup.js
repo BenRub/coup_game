@@ -78,6 +78,14 @@ function dragCardFromDeck(ev) {
     ev.dataTransfer.setData("fromDeck", "yes");
 }
 
+function dragCoinsFromBank(ev) {
+    ev.dataTransfer.setData("fromBank", "yes");
+}
+
+function dragCoinsFromMyself(ev) {
+    ev.dataTransfer.setData("coinsFromMyself", "yes");
+}
+
 function dropToCard(ev) {
     ev.preventDefault();
     if (ev.dataTransfer.getData("fromDeck") !== "yes") {
@@ -86,8 +94,32 @@ function dropToCard(ev) {
     takeCardFromDeck()
 }
 
+function dropToCoins(ev) {
+    ev.preventDefault();
+    if (ev.dataTransfer.getData("fromBank") !== "yes") {
+        return
+    }
+
+    let coins = prompt("How many coins?", "0");
+    if (coins != null) {
+        takeFromBank(coins)
+    }
+}
+
 function dropToDeck(ev) {
     ev.preventDefault();
     let cardId = ev.dataTransfer.getData("cardId");
     returnCardToDeck(cardId)
+}
+
+function dropToBank(ev) {
+    ev.preventDefault();
+    if (ev.dataTransfer.getData("coinsFromMyself") !== "yes") {
+        return
+    }
+
+    let coins = prompt("How many coins?", "0");
+    if (coins != null) {
+        payToBank(coins)
+    }
 }

@@ -27,7 +27,11 @@ function openCard(cardId) {
     xhttp.send(data);
 }
 
-function takeFromBank() {
+function takeOneFromBank() {
+    takeFromBank(1)
+}
+
+function takeFromBank(coins) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -35,14 +39,13 @@ function takeFromBank() {
                 alert(this.responseText)
         }
     };
-    let coins = document.getElementById("txtTakeFromBank").value
     xhttp.open("POST", "/take_from_bank", true);
     let data = JSON.stringify({"coins": coins});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }
 
-function payToBank() {
+function payToBank(coins) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -50,7 +53,6 @@ function payToBank() {
                 alert(this.responseText)
         }
     };
-    let coins = document.getElementById("txtPayToBank").value
     xhttp.open("POST", "/pay_to_bank", true);
     let data = JSON.stringify({"coins": coins});
     xhttp.setRequestHeader("content-type", "application/json")
