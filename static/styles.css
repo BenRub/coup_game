@@ -216,6 +216,10 @@ body {
     align-items: center;
 }
 
+#playing_players .turn {
+    background-color: #ffe191;
+}
+
 #playing_players .playing_player .player_name {
     font-size: 20px;
     color: black;

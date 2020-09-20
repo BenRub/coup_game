@@ -26,18 +26,38 @@ function updateAllPlayersNames(allPlayersJson) {
 }
 
 let deckSizeElement = undefined
-let cardsNamesThatAreBeingPlayedElement = undefined
-function updateDeckSizeAndTypes(content) {
+
+function updateDeckSize(deck_size) {
     if (deckSizeElement === undefined) {
         deckSizeElement = document.getElementById("deckSize")
     }
 
-     if (cardsNamesThatAreBeingPlayedElement === undefined) {
+    deckSizeElement.innerText = deck_size + " cards"
+}
+
+let cardsNamesThatAreBeingPlayedElement = undefined
+
+function updateCardsNamesThatAreBeingPlayed(cards_names) {
+    if (cardsNamesThatAreBeingPlayedElement === undefined) {
         cardsNamesThatAreBeingPlayedElement = document.getElementById("cardsNamesThatAreBeingPlayed")
     }
 
-    deckSizeElement.innerText = content['deck_size'] + " cards"
-    cardsNamesThatAreBeingPlayedElement.innerText = content['cards_names']
+    cardsNamesThatAreBeingPlayedElement.innerText = cards_names
+}
+
+let endTurnButtonElement = undefined
+
+function updateEndTurnAccess(turn, myName) {
+    if (endTurnButtonElement === undefined) {
+        endTurnButtonElement = document.getElementById("endTurn")
+    }
+
+    if (turn === myName) {
+        endTurnButtonElement.disabled = ""
+    } else {
+        endTurnButtonElement.disabled = "disabled"
+    }
+
 }
 
 let myCardsElem = undefined
@@ -92,7 +112,7 @@ function updateMyCoins(myCoins) {
 
 let playingPlayersElem = undefined
 
-function updatePlayingPlayers(playersJson) {
+function updatePlayingPlayers(turn, playersJson) {
     if (playingPlayersElem === undefined) {
         playingPlayersElem = document.getElementById("playing_players")
     }
@@ -102,8 +122,11 @@ function updatePlayingPlayers(playersJson) {
         let player = playersJson[playerName]
         let playingPlayerDiv = document.createElement("div")
         playingPlayerDiv.className = "playing_player"
+        if (playerName === turn) {
+            playingPlayerDiv.className += " turn"
+        }
         playingPlayerDiv.ondragover = allowDrop
-        playingPlayerDiv.ondrop = function(ev) {
+        playingPlayerDiv.ondrop = function (ev) {
             dropToPlayer(playerName, ev)
         }
 
@@ -158,10 +181,12 @@ function getGameInfo() {
         if (this.readyState === 4 && this.status === 200) {
             let content = JSON.parse(this.response);
             updateAllPlayersNames(content['all_players'])
-            updateDeckSizeAndTypes(content)
+            updateDeckSize(content['deck_size'])
+            updateCardsNamesThatAreBeingPlayed(content['cards_names'])
+            updateEndTurnAccess(content['turn'], content['my_name'])
             updateMyCards(content['my_cards'])
             updateMyCoins(content['my_coins'])
-            updatePlayingPlayers(content['players'])
+            updatePlayingPlayers(content['turn'], content['players'])
         }
     };
     xhttp.open("GET", "/game_info", true);

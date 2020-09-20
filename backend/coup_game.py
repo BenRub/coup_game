@@ -91,6 +91,7 @@ class CoupGame:
         gameInfo = {
             "cards_names": self.cardsNames,
             "deck_size": len(self.deck),
+            "my_name": player.GetName(),
             "turn": self.turn.GetName() if self.turn else "",
             "my_cards": playerCards,
             "my_coins": player.coins,
