@@ -12,6 +12,7 @@ class CoupGame:
 
     def __init__(self):
         self.started = False
+        self.gameOver = False
         self.turn = None
         self.cardsNames = []
         self.players = {}
@@ -24,6 +25,7 @@ class CoupGame:
             raise CoupException(f"No player with name {playerToStart}")
 
         self.started = True
+        self.gameOver = False
         self.turn = player
         self.cardsNames = cardNames
         self.deck = self.createCards(cardNames)
@@ -47,9 +49,22 @@ class CoupGame:
         return None
 
     def EndTurn(self, player: Player):
+        if self.gameOver:
+            return
+
         if self.turn is not player:
             raise CoupException("It's not your turn!")
 
+        exposedPlayersCount = 0
+        self.switchTurn()
+        while self.turn.AllCardsAreExposed():
+            exposedPlayersCount += 1
+            if exposedPlayersCount >= len(self.playingPlayers) - 1:
+                self.gameOver = True
+                break
+            self.switchTurn()
+
+    def switchTurn(self):
         playerIndex = 0
         for player in self.playingPlayers:
             if player == self.turn:

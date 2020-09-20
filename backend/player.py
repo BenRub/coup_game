@@ -37,3 +37,9 @@ class Player:
         del self.cards[cardId]
 
         return cardToPop
+
+    def AllCardsAreExposed(self) -> bool:
+        for _, card in self.cards.items():
+            if not card.Visible:
+                return False
+        return True
