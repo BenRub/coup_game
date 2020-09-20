@@ -71,7 +71,7 @@ class CoupGame:
                 continue
 
             cards = []
-            for card in gamePlayer.cards:
+            for _, card in gamePlayer.cards.items():
                 if card.Visible:
                     cards.append(card.GetName())
                 else:
