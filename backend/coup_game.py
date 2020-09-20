@@ -150,6 +150,7 @@ class CoupGame:
         if not card:
             raise CoupException(f"Player {player.GetName()} does not have card id {cardId}")
 
+        card.Visible = False
         self.deck.append(card)
         self.shuffleDeck()
 
