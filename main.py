@@ -1,5 +1,4 @@
 import time
-import uuid
 from typing import Optional
 
 from flask import Flask, url_for
@@ -13,9 +12,7 @@ from backend.coup_game import CoupGame
 from backend.player import Player
 from invalid_usage import InvalidUsage
 from flask import jsonify
-
 from utils import is_list_of_strings
-from flask import Response
 
 
 def create_app():
@@ -152,13 +149,11 @@ def create_app():
     @app.route('/transfer', methods=['POST'])
     def transfer():
         content = request.json
-        if 'player_name_src' not in content:
-            raise InvalidUsage("Player source not given", status_code=400)
         if 'player_name_dst' not in content:
             raise InvalidUsage("Player source not given", status_code=400)
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.Transfer(content['player_name_src'], content['player_name_dst'], int(content['coins']))
+        game.Transfer(getPlayer(), content['player_name_dst'], int(content['coins']))
         return "", 200
 
     return app

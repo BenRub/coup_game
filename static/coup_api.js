@@ -59,7 +59,7 @@ function payToBank(coins) {
     xhttp.send(data);
 }
 
-function transfer() {
+function transfer(player_name_dst, coins) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -67,11 +67,8 @@ function transfer() {
                 alert(this.responseText)
         }
     };
-    let player_name_src = document.getElementById("txtTransferSource").value;
-    let player_name_dst = document.getElementById("txtTransferDst").value;
-    let coins = document.getElementById("txtTransferCoins").value;
     xhttp.open("POST", "/transfer", true);
-    let data = JSON.stringify({"player_name_src": player_name_src, "player_name_dst": player_name_dst, "coins": coins});
+    let data = JSON.stringify({"player_name_dst": player_name_dst, "coins": coins});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }

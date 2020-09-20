@@ -162,17 +162,13 @@ class CoupGame:
             raise CoupException(f"Player {player.GetName()} does not have {coins} coins")
         player.coins -= coins
 
-    def Transfer(self, playerNameSrc, playerNameDst, coins: int):
-        playerSrc = self.getPlayerByName(playerNameSrc)
-        if not playerSrc:
-            raise CoupException(f"No player with name {playerNameSrc}")
-
+    def Transfer(self, player: Player, playerNameDst, coins: int):
         playerDst = self.getPlayerByName(playerNameDst)
         if not playerDst:
             raise CoupException(f"No player with name {playerNameDst}")
 
-        if playerSrc.coins < coins:
-            raise CoupException(f"Player {playerSrc.GetName()} does not have {coins} coins")
+        if player.coins < coins:
+            raise CoupException(f"You don't not have {coins} coins")
 
-        playerSrc.coins -= coins
+        player.coins -= coins
         playerDst.coins += coins

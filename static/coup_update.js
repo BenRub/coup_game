@@ -117,6 +117,9 @@ function updatePlayingPlayers(playersJson) {
 
         let playerCoinsDiv = document.createElement("div")
         playerCoinsDiv.className = "player_coins"
+        playerCoinsDiv.title = playerName
+        playerCoinsDiv.ondragover = ondragover
+        playerCoinsDiv.ondrop = dropToPlayer
         let threeCoinsAmount = Math.floor(player['coins'] / 3)
         let oneCoinAmount = player['coins'] - 3 * threeCoinsAmount
 

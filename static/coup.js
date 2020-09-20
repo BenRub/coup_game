@@ -100,7 +100,7 @@ function dropToCoins(ev) {
         return
     }
 
-    let coins = prompt("How many coins?", "0");
+    let coins = prompt("How many coins you want to take from the bank?", "0");
     if (coins != null) {
         takeFromBank(coins)
     }
@@ -118,8 +118,22 @@ function dropToBank(ev) {
         return
     }
 
-    let coins = prompt("How many coins?", "0");
+    let coins = prompt("How many coins you want to pay the bank?", "0");
     if (coins != null) {
         payToBank(coins)
+    }
+}
+
+function dropToPlayer(ev) {
+    ev.preventDefault();
+    if (ev.dataTransfer.getData("coinsFromMyself") !== "yes") {
+        return
+    }
+
+    let playerToPay = ev.target.title
+
+    let coins = prompt("How many coins you want to transfer to " + playerToPay + "?", "0");
+    if (coins != null) {
+        transfer(playerToPay, coins)
     }
 }
