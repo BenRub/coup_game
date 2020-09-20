@@ -155,14 +155,24 @@ class CoupGame:
         self.shuffleDeck()
 
     def TakeFromBank(self, player: Player, coins: int):
+        if coins < 0:
+            raise CoupException(f"Can't take negative amount of coins")
+
         player.coins += coins
 
     def PayToBank(self, player: Player, coins: int):
+        if coins < 0:
+            raise CoupException(f"Can't pay negative amount of coins")
+
         if player.coins < coins:
             raise CoupException(f"Player {player.GetName()} does not have {coins} coins")
+
         player.coins -= coins
 
     def Transfer(self, player: Player, playerNameDst, coins: int):
+        if coins < 0:
+            raise CoupException(f"Can't transfer negative amount of coins")
+
         playerDst = self.getPlayerByName(playerNameDst)
         if not playerDst:
             raise CoupException(f"No player with name {playerNameDst}")
