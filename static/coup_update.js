@@ -49,12 +49,15 @@ function updateDeckData(content) {
     document.getElementById("game_info").innerHTML = gameInfo;
 }
 
+let myCardsElem = undefined
 let myCardsElements = {
 
 }
 
 function updateMyCards(myCardsJson) {
-    let myCardsElem = document.getElementById("my_cards")
+    if (myCardsElem === undefined) {
+        myCardsElem = document.getElementById("my_cards")
+    }
 
     for (let cardIdLocal in myCardsElements) {
         if (!(cardIdLocal in myCardsJson)) {
