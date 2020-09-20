@@ -75,6 +75,12 @@ function getGameInfo() {
                 myCardsElem.appendChild(cardElement)
             }
 
+            let threeCoinsAmount = Math.floor(content['my_coins'] / 3)
+            let oneCoinAmount = content['my_coins'] - 3 * threeCoinsAmount
+
+            document.getElementById("oneCoinAmount").innerText = oneCoinAmount + ""
+            document.getElementById("threeCoinsAmount").innerText = threeCoinsAmount + ""
+
             let playersInfo = '<table border="1">'
             playersInfo += '<tr>'
             playersInfo += '<td class="nameDiv">Name</td>'
