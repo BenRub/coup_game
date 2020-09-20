@@ -80,13 +80,13 @@ class CoupGame:
             playersInfo[gamePlayer.GetName()]["cards"] = cards
             playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
 
-        playerCards = []
+        playerCards = {}
         for _, card in player.cards.items():
-            playerCards.append({
+            playerCards[card.GetId()] = {
                 "cardId": card.GetId(),
                 "cardName": card.GetName(),
                 "visible": card.Visible,
-            })
+            }
 
         gameInfo = {
             "cards_names": self.cardsNames,

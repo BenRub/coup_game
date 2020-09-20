@@ -1,79 +1,105 @@
+function updateAllPlayersNames(allPlayersJson) {
+    for (let playerNameIndex in all_players_names) {
+        let playerName = all_players_names[playerNameIndex]
+        let found = false
+        for (let parsedPlayerNameIndex in allPlayersJson) {
+            let parsedPlayerName = allPlayersJson[parsedPlayerNameIndex]
+            if (parsedPlayerName === playerName) {
+                found = true
+                break
+            }
+        }
+
+        if (!found) {
+            document.getElementById("player_option_" + playerName).remove()
+        }
+    }
+
+    let cbListOfPlayers = document.getElementById("listOfPlayers")
+    for (let parsedPlayerNameIndex in allPlayersJson) {
+        let parsedPlayerName = allPlayersJson[parsedPlayerNameIndex]
+        let found = false
+        for (let playerNameIndex in all_players_names) {
+            let playerName = all_players_names[playerNameIndex]
+            if (parsedPlayerName === playerName) {
+                found = true
+                break
+            }
+        }
+
+        if (!found) {
+            let option = document.createElement("option");
+            option.innerText = parsedPlayerName
+            option.id = "player_option_" + parsedPlayerName
+            cbListOfPlayers.appendChild(option)
+        }
+    }
+
+    all_players_names = allPlayersJson
+}
+
+function updateDeckData(content) {
+    document.getElementById("deckSize").innerText = content['deck_size'] + " cards"
+
+    let gameInfo = ''
+    gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
+    gameInfo += '<div>Turn: ' + content['turn'] + '</div>'
+    gameInfo += '<div class="emptyLine"></div>'
+
+    document.getElementById("game_info").innerHTML = gameInfo;
+}
+
+let myCardsElements = {
+
+}
+
+function updateMyCards(myCardsJson) {
+    let myCardsElem = document.getElementById("my_cards")
+
+    for (let cardIdLocal in myCardsElements) {
+        if (!(cardIdLocal in myCardsJson)) {
+            myCardsElements[cardIdLocal].remove()
+            delete myCardsElements[cardIdLocal]
+        }
+    }
+
+    for (let cardId in myCardsJson) {
+        let myCard = myCardsJson[cardId]
+        let cardElement = undefined
+        if (cardId in myCardsElements) {
+            cardElement = myCardsElements[cardId]
+        } else {
+            cardElement = document.createElement("div")
+            cardElement.title = cardId
+            cardElement.draggable = true
+            cardElement.ondragstart = dragCardToDeck
+            myCardsElements[cardId] = cardElement
+            myCardsElem.appendChild(cardElement)
+        }
+
+        cardElement.className = "card " + myCard["cardName"].toLowerCase()
+        if (myCard["visible"]) {
+            cardElement.className += " exposed"
+        } else {
+            cardElement.onclick = function () {
+                if (confirm("Are you sure you want to expose your " + myCard["cardName"] + "?")) {
+                    openCard(myCard["cardId"])
+                }
+            }
+        }
+    }
+}
+
 function getGameInfo() {
     let xhttp = new XMLHttpRequest();
-
-
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let content = JSON.parse(this.response);
 
-            for (let playerNameIndex in all_players_names) {
-                let playerName = all_players_names[playerNameIndex]
-                let found = false
-                for (let parsedPlayerNameIndex in content['all_players']) {
-                    let parsedPlayerName = content['all_players'][parsedPlayerNameIndex]
-                    if (parsedPlayerName === playerName) {
-                        found = true
-                        break
-                    }
-                }
+            updateAllPlayersNames(content['all_players'])
+            updateDeckData(content)
+            updateMyCards(content['my_cards'])
 
-                if (!found) {
-                    document.getElementById("player_option_" + playerName).remove()
-                }
-            }
-
-            let cbListOfPlayers = document.getElementById("listOfPlayers")
-            for (let parsedPlayerNameIndex in content['all_players']) {
-                let parsedPlayerName = content['all_players'][parsedPlayerNameIndex]
-                let found = false
-                for (let playerNameIndex in all_players_names) {
-                    let playerName = all_players_names[playerNameIndex]
-                    if (parsedPlayerName === playerName) {
-                        found = true
-                        break
-                    }
-                }
-
-                if (!found) {
-                    let option = document.createElement("option");
-                    option.innerText = parsedPlayerName
-                    option.id = "player_option_" + parsedPlayerName
-                    cbListOfPlayers.appendChild(option)
-                }
-            }
-
-            all_players_names = content['all_players']
-
-
-            document.getElementById("deckSize").innerText = content['deck_size'] + " cards"
-
-            let gameInfo = ''
-            gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
-            gameInfo += '<div>Turn: ' + content['turn'] + '</div>'
-            gameInfo += '<div class="emptyLine"></div>'
-
-            document.getElementById("game_info").innerHTML = gameInfo;
-
-            let myCardsElem = document.getElementById("my_cards")
-            myCardsElem.innerHTML = ''
-            for (let cardIndex in content['my_cards']) {
-                let myCard = content['my_cards'][cardIndex]
-                let cardElement = document.createElement("div")
-                cardElement.title = myCard["cardId"]
-                cardElement.className = "card " + myCard["cardName"].toLowerCase()
-                cardElement.draggable = true
-                cardElement.ondragstart = dragCardToDeck
-                if (myCard["visible"]) {
-                    cardElement.className += " exposed"
-                } else {
-                    cardElement.onclick = function () {
-                        if (confirm("Are you sure you want to expose your " + myCard["cardName"] + "?")) {
-                            openCard(myCard["cardId"])
-                        }
-                    }
-                }
-                myCardsElem.appendChild(cardElement)
-            }
 
             let threeCoinsAmount = Math.floor(content['my_coins'] / 3)
             let oneCoinAmount = content['my_coins'] - 3 * threeCoinsAmount
@@ -105,18 +131,3 @@ function getGameInfo() {
 }
 
 window.setInterval(getGameInfo, 1000);
-
-function getSelectValues(select) {
-    let result = [];
-    let options = select && select.options;
-    let opt;
-
-    for (let i = 0, iLen = options.length; i < iLen; i++) {
-        opt = options[i];
-
-        if (opt.selected) {
-            result.push(opt.value || opt.text);
-        }
-    }
-    return result;
-}
