@@ -25,15 +25,19 @@ function updateAllPlayersNames(allPlayersJson) {
     }
 }
 
-function updateDeckData(content) {
-    document.getElementById("deckSize").innerText = content['deck_size'] + " cards"
+let deckSizeElement = undefined
+let cardsNamesThatAreBeingPlayedElement = undefined
+function updateDeckSizeAndTypes(content) {
+    if (deckSizeElement === undefined) {
+        deckSizeElement = document.getElementById("deckSize")
+    }
 
-    let gameInfo = ''
-    gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
-    gameInfo += '<div>Turn: ' + content['turn'] + '</div>'
-    gameInfo += '<div class="emptyLine"></div>'
+     if (cardsNamesThatAreBeingPlayedElement === undefined) {
+        cardsNamesThatAreBeingPlayedElement = document.getElementById("cardsNamesThatAreBeingPlayed")
+    }
 
-    document.getElementById("game_info").innerHTML = gameInfo;
+    deckSizeElement.innerText = content['deck_size'] + " cards"
+    cardsNamesThatAreBeingPlayedElement.innerText = content['cards_names']
 }
 
 let myCardsElem = undefined
@@ -148,14 +152,13 @@ function updatePlayingPlayers(playersJson) {
     }
 }
 
-
 function getGameInfo() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let content = JSON.parse(this.response);
             updateAllPlayersNames(content['all_players'])
-            updateDeckData(content)
+            updateDeckSizeAndTypes(content)
             updateMyCards(content['my_cards'])
             updateMyCoins(content['my_coins'])
             updatePlayingPlayers(content['players'])
