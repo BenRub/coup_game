@@ -1,5 +1,31 @@
 let all_players_names = []
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function dragCardToDeck(ev) {
+    ev.dataTransfer.setData("cardId", ev.target.title);
+}
+
+function dragCardFromDeck(ev) {
+    ev.dataTransfer.setData("fromDeck", "yes");
+}
+
+function dropToCard(ev) {
+    ev.preventDefault();
+    if (ev.dataTransfer.getData("fromDeck") !== "yes") {
+        return
+    }
+    takeCardFromDeck()
+}
+
+function dropToDeck(ev) {
+    ev.preventDefault();
+    let cardId = ev.dataTransfer.getData("cardId");
+    returnCardToDeck(cardId)
+}
+
 function getGameInfo() {
     let xhttp = new XMLHttpRequest();
 
@@ -59,11 +85,16 @@ function getGameInfo() {
             for (let cardIndex in content['my_cards']) {
                 let myCard = content['my_cards'][cardIndex]
                 let cardElement = document.createElement("div")
+                cardElement.title = myCard["cardId"]
                 cardElement.className = "card " + myCard["cardName"].toLowerCase()
+                cardElement.draggable = true
+                cardElement.ondragstart = dragCardToDeck
+                cardElement.ondragover = allowDrop
+                cardElement.ondrop = dropToCard
                 if (myCard["visible"]) {
                     cardElement.className += " exposed"
                 } else {
-                    cardElement.onclick = function() {
+                    cardElement.onclick = function () {
                         if (confirm("Are you sure you want to expose your " + myCard["cardName"] + "?")) {
                             openCard(myCard["cardId"])
                         }
@@ -105,18 +136,18 @@ function getGameInfo() {
 window.setInterval(getGameInfo, 2000);
 
 function getSelectValues(select) {
-  let result = [];
-  let options = select && select.options;
-  let opt;
+    let result = [];
+    let options = select && select.options;
+    let opt;
 
-  for (let i=0, iLen=options.length; i<iLen; i++) {
-    opt = options[i];
+    for (let i = 0, iLen = options.length; i < iLen; i++) {
+        opt = options[i];
 
-    if (opt.selected) {
-      result.push(opt.value || opt.text);
+        if (opt.selected) {
+            result.push(opt.value || opt.text);
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 function startGame() {
@@ -191,7 +222,7 @@ function transfer() {
     let player_name_dst = document.getElementById("txtTransferDst").value;
     let coins = document.getElementById("txtTransferCoins").value;
     xhttp.open("POST", "/transfer", true);
-    let data = JSON.stringify({"player_name_src": player_name_src, "player_name_dst":player_name_dst, "coins": coins});
+    let data = JSON.stringify({"player_name_src": player_name_src, "player_name_dst": player_name_dst, "coins": coins});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }
@@ -209,7 +240,7 @@ function takeCardFromDeck() {
     xhttp.send();
 }
 
-function returnCardToDeck() {
+function returnCardToDeck(cardId) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -217,9 +248,8 @@ function returnCardToDeck() {
                 alert(this.responseText)
         }
     };
-    let cardName = document.getElementById("txtReturnCardToDeck").value
     xhttp.open("POST", "/return_card_to_deck", true);
-    let data = JSON.stringify({"cardName": cardName});
+    let data = JSON.stringify({"cardId": cardId});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }

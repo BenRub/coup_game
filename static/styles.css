@@ -35,7 +35,8 @@ body {
 }
 
 .my_cards {
-    width: 30%;
+    width: 25%;
+    height: 255px;
     margin: 5px auto auto;
     display: flex;
     flex-direction: row;
@@ -45,7 +46,6 @@ body {
 .my_cards .card {
     width: 159px;
     height: 255px;
-    object-fit: cover;
     background-repeat: no-repeat;
     background-size: contain;
     margin-left: 2px;
@@ -69,11 +69,35 @@ body {
 }
 
 .my_cards .writer {
-    background-image: url("/static/cards_images/writer.jpeg") ;
+    background-image: url("/static/cards_images/writer.jpeg");
 }
 
 .my_cards .exposed {
     opacity: 0.4;
+}
+
+.deck_and_bank {
+    width: 40%;
+    margin: 20px auto auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.deck_and_bank .deck {
+    background-image: url("/static/deck.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 215px;
+    height: 275px;
+}
+
+.deck_and_bank .bank {
+    background-image: url("/static/bank.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 275px;
+    height: 230px;
 }
 
 .nameDiv {
