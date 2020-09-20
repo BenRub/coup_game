@@ -90,6 +90,16 @@ body {
     background-size: contain;
     width: 215px;
     height: 275px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 30px;
+    color: blue;
+}
+
+.deck_and_bank .deck span {
+    height: 40px;
+    align-self: center;
 }
 
 .deck_and_bank .bank {

@@ -72,9 +72,11 @@ function getGameInfo() {
 
             all_players_names = content['all_players']
 
+
+            document.getElementById("deckSize").innerText = content['deck_size'] + " cards"
+
             let gameInfo = ''
             gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
-            gameInfo += '<div>Deck Size: ' + content['deck_size'] + '</div>'
             gameInfo += '<div>Turn: ' + content['turn'] + '</div>'
             gameInfo += '<div class="emptyLine"></div>'
 
@@ -102,13 +104,6 @@ function getGameInfo() {
                 }
                 myCardsElem.appendChild(cardElement)
             }
-
-            let myInfo = ''
-            myInfo += '<div>My Cards: ' + content['my_cards'] + '</div>'
-            myInfo += '<div>My Coins: ' + content['my_coins'] + '</div>'
-            myInfo += '<div class="emptyLine"></div>'
-
-            document.getElementById("my_info").innerHTML = myInfo;
 
             let playersInfo = '<table border="1">'
             playersInfo += '<tr>'
