@@ -124,13 +124,11 @@ function dropToBank(ev) {
     }
 }
 
-function dropToPlayer(ev) {
+function dropToPlayer(playerToPay, ev) {
     ev.preventDefault();
     if (ev.dataTransfer.getData("coinsFromMyself") !== "yes") {
         return
     }
-
-    let playerToPay = ev.target.title
 
     let coins = prompt("How many coins you want to transfer to " + playerToPay + "?", "0");
     if (coins != null) {

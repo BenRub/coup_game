@@ -8,7 +8,6 @@ function updateAllPlayersNames(allPlayersJson) {
 
     for (let playerNameLocal in myPlayersOptions) {
         if (!(playerNameLocal in allPlayersJson)) {
-            console.log("why1")
             myPlayersOptions[playerNameLocal].remove()
             delete myPlayersOptions[playerNameLocal]
         }
@@ -18,7 +17,7 @@ function updateAllPlayersNames(allPlayersJson) {
         if (parsedPlayerName in myPlayersOptions) {
             continue
         }
-        console.log("why2")
+
         let option = document.createElement("option");
         option.innerText = parsedPlayerName
         myPlayersOptions[parsedPlayerName] = option
@@ -99,6 +98,10 @@ function updatePlayingPlayers(playersJson) {
         let player = playersJson[playerName]
         let playingPlayerDiv = document.createElement("div")
         playingPlayerDiv.className = "playing_player"
+        playingPlayerDiv.ondragover = allowDrop
+        playingPlayerDiv.ondrop = function(ev) {
+            dropToPlayer(playerName, ev)
+        }
 
         let playerNameDiv = document.createElement("div")
         playerNameDiv.className = "player_name"
@@ -118,8 +121,6 @@ function updatePlayingPlayers(playersJson) {
         let playerCoinsDiv = document.createElement("div")
         playerCoinsDiv.className = "player_coins"
         playerCoinsDiv.title = playerName
-        playerCoinsDiv.ondragover = ondragover
-        playerCoinsDiv.ondrop = dropToPlayer
         let threeCoinsAmount = Math.floor(player['coins'] / 3)
         let oneCoinAmount = player['coins'] - 3 * threeCoinsAmount
 
