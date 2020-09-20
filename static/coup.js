@@ -128,7 +128,7 @@ function getGameInfo() {
     xhttp.send();
 }
 
-window.setInterval(getGameInfo, 2000);
+window.setInterval(getGameInfo, 1000);
 
 function getSelectValues(select) {
     let result = [];
