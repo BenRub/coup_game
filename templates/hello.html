@@ -36,13 +36,13 @@
     </div>
 
     <div class="my_info">
-        <div id="my_cards" class="my_cards">
+        <div id="my_cards" class="my_cards" ondrop="dropToCard(event)" ondragover="allowDrop(event)">
 
         </div>
 
-        <div id="my_coins" class="my_cards">
-            <div>1 X <img src="/static/one_coin.png" /></div>
-            <div>1 X <img src="/static/three_coins.png" /></div>
+        <div id="my_coins" class="my_coins">
+            <div><span id="oneCoinAmount">1</span> X <img src="/static/one_coin.png" /></div>
+            <div><span id="threeCoinsAmount">1</span> X <img src="/static/three_coins.png" /></div>
         </div>
     </div>
 

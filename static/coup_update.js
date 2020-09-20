@@ -63,8 +63,6 @@ function getGameInfo() {
                 cardElement.className = "card " + myCard["cardName"].toLowerCase()
                 cardElement.draggable = true
                 cardElement.ondragstart = dragCardToDeck
-                cardElement.ondragover = allowDrop
-                cardElement.ondrop = dropToCard
                 if (myCard["visible"]) {
                     cardElement.className += " exposed"
                 } else {
