@@ -105,6 +105,7 @@ body {
 }
 
 .my_coins {
+    color: white;
     margin-right: 20%;
     width: 10%;
     display: flex;
@@ -134,24 +135,28 @@ body {
     margin-right: 2px;
 }
 
-.my_cards .capitalist {
+.capitalist {
     background-image: url("/static/cards_images/capitalist.jpeg");
 }
 
-.my_cards .communist {
+.communist {
     background-image: url("/static/cards_images/communist.jpeg");
 }
 
-.my_cards .guerrilla {
+.guerrilla {
     background-image: url("/static/cards_images/guerrilla.jpeg");
 }
 
-.my_cards .protester {
+.protester {
     background-image: url("/static/cards_images/protester.jpeg");
 }
 
-.my_cards .writer {
+.writer {
     background-image: url("/static/cards_images/writer.jpeg");
+}
+
+.--hidden-- {
+    background-image: url("/static/cards_images/--hidden--.jpeg");
 }
 
 .my_cards .exposed {
@@ -190,6 +195,49 @@ body {
     background-size: contain;
     width: 275px;
     height: 230px;
+}
+
+#playing_players {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#playing_players .playing_player {
+    border: 1px solid white;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#playing_players .playing_player .player_name {
+    font-size: 20px;
+    color: white;
+}
+
+#playing_players .playing_player .player_cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#playing_players .playing_player .player_cards .player_card {
+    width: 100px;
+    height: 162px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#playing_players .playing_player .player_coins {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .nameDiv {

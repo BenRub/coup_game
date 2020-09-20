@@ -1,10 +1,10 @@
 <!doctype html>
 <title>Hello from Flask</title>
- <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ appTimestamp }}">
- <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='popup.css') }}?v={{ appTimestamp }}">
- <script type="text/javascript" src="{{ url_for('static', filename='coup_api.js') }}?v={{ appTimestamp }}"></script>
- <script type="text/javascript" src="{{ url_for('static', filename='coup_update.js') }}?v={{ appTimestamp }}"></script>
- <script type="text/javascript" src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ appTimestamp }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='popup.css') }}?v={{ appTimestamp }}">
+<script type="text/javascript" src="{{ url_for('static', filename='coup_api.js') }}?v={{ appTimestamp }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='coup_update.js') }}?v={{ appTimestamp }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
 
 <div id="allCards" class="allCardsClosed">
     <div style="margin: auto;width:80px;color:blue;" onclick="closeCardsPopup()">Close</div>
@@ -21,7 +21,7 @@
             {% if name %}
                 Hello {{ name }}! (<a href="/logout">Logout</a>)
             {% else %}
-              Who are you? (<a href="/logout">Logout</a>)
+                Who are you? (<a href="/logout">Logout</a>)
             {% endif %}
         </div>
 
@@ -40,27 +40,35 @@
 
         </div>
 
-        <div id="my_coins" class="my_coins" draggable="true" ondragstart="dragCoinsFromMyself(event)" ondrop="dropToCoins(event)" ondragover="allowDrop(event)">
-            <div><span id="oneCoinAmount">0</span> X <img src="/static/one_coin.png" /></div>
-            <div><span id="threeCoinsAmount">0</span> X <img src="/static/three_coins.png" /></div>
+        <div id="my_coins" class="my_coins" draggable="true" ondragstart="dragCoinsFromMyself(event)"
+             ondrop="dropToCoins(event)" ondragover="allowDrop(event)">
+            <div><span id="oneCoinAmount">0</span> X <img src="/static/one_coin.png"/></div>
+            <div><span id="threeCoinsAmount">0</span> X <img src="/static/three_coins.png"/></div>
         </div>
     </div>
 
     <div class="deck_and_bank">
-        <div class="deck" draggable="true" ondragstart="dragCardFromDeck(event)" ondrop="dropToDeck(event)" ondragover="allowDrop(event)">
+        <div class="deck" draggable="true" ondragstart="dragCardFromDeck(event)" ondrop="dropToDeck(event)"
+             ondragover="allowDrop(event)">
             <span id="deckSize"></span>
         </div>
-        <div class="bank" draggable="true" ondragstart="dragCoinsFromBank(event)" ondrop="dropToBank(event)" ondragover="allowDrop(event)" onclick="takeOneFromBank()"></div>
+        <div class="bank" draggable="true" ondragstart="dragCoinsFromBank(event)" ondrop="dropToBank(event)"
+             ondragover="allowDrop(event)" onclick="takeOneFromBank()"></div>
     </div>
 
     <div id="game_info">
 
     </div>
 
-    <div><button type="button" onclick="transfer()">Transfer</button><input id="txtTransferSource" placeholder="from"><input id="txtTransferDst" placeholder="to"><input id="txtTransferCoins" value="0"></div>
-    <div><button type="button" onclick="endTurn()">End turn</button></div>
+    <div>
+        <button type="button" onclick="transfer()">Transfer</button>
+        <input id="txtTransferSource" placeholder="from"><input id="txtTransferDst" placeholder="to"><input
+            id="txtTransferCoins" value="0"></div>
+    <div>
+        <button type="button" onclick="endTurn()">End turn</button>
+    </div>
 
-    <div id="players_info">
+    <div id="playing_players">
 
     </div>
 

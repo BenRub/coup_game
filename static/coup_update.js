@@ -87,34 +87,74 @@ function updateMyCoins(myCoins) {
     document.getElementById("threeCoinsAmount").innerText = threeCoinsAmount + ""
 }
 
+let playingPlayersElem = undefined
+
+function updatePlayingPlayers(playersJson) {
+    if (playingPlayersElem === undefined) {
+        playingPlayersElem = document.getElementById("playing_players")
+    }
+    playingPlayersElem.innerHTML = ''
+
+    for (let playerName in playersJson) {
+        let player = playersJson[playerName]
+        let playingPlayerDiv = document.createElement("div")
+        playingPlayerDiv.className = "playing_player"
+
+        let playerNameDiv = document.createElement("div")
+        playerNameDiv.className = "player_name"
+        playerNameDiv.innerText = playerName
+        playingPlayerDiv.appendChild(playerNameDiv)
+
+        let playerCardsDiv = document.createElement("div")
+        playerCardsDiv.className = "player_cards"
+        for (let cardIndex in player['cards']) {
+            let cardName = player['cards'][cardIndex].toLowerCase()
+            let playerCardDiv = document.createElement("div")
+            playerCardDiv.className = "player_card " + cardName
+            playerCardsDiv.appendChild(playerCardDiv)
+        }
+        playingPlayerDiv.appendChild(playerCardsDiv)
+
+        let playerCoinsDiv = document.createElement("div")
+        playerCoinsDiv.className = "player_coins"
+        let threeCoinsAmount = Math.floor(player['coins'] / 3)
+        let oneCoinAmount = player['coins'] - 3 * threeCoinsAmount
+
+        let oneCoinDiv = document.createElement("div")
+        let oneCoinSpan = document.createElement("span")
+        oneCoinSpan.innerText = oneCoinAmount + " X "
+        oneCoinDiv.appendChild(oneCoinSpan)
+        let oneCoinImg = document.createElement("img")
+        oneCoinImg.src = "/static/one_coin.png"
+        oneCoinDiv.appendChild(oneCoinImg)
+        playerCoinsDiv.appendChild(oneCoinDiv)
+
+        let threeCoinsDiv = document.createElement("div")
+        let threeCoinsSpan = document.createElement("span")
+        threeCoinsSpan.innerText = threeCoinsAmount + " X "
+        threeCoinsDiv.appendChild(threeCoinsSpan)
+        let threeCoinsImg = document.createElement("img")
+        threeCoinsImg.src = "/static/three_coins.png"
+        threeCoinsDiv.appendChild(threeCoinsImg)
+        playerCoinsDiv.appendChild(threeCoinsDiv)
+
+        playingPlayerDiv.appendChild(playerCoinsDiv)
+
+        playingPlayersElem.appendChild(playingPlayerDiv)
+    }
+}
+
+
 function getGameInfo() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let content = JSON.parse(this.response);
-
             updateAllPlayersNames(content['all_players'])
             updateDeckData(content)
             updateMyCards(content['my_cards'])
             updateMyCoins(content['my_coins'])
-
-            let playersInfo = '<table border="1">'
-            playersInfo += '<tr>'
-            playersInfo += '<td class="nameDiv">Name</td>'
-            playersInfo += '<td class="cardsDiv">Cards</td>'
-            playersInfo += '<td class="coinsDiv">coins</td>'
-            playersInfo += '</tr>'
-            for (let playerName in content['players']) {
-                let player = content['players'][playerName]
-                playersInfo += '<tr>'
-                playersInfo += '<td class="nameDiv">' + playerName + '</td>'
-                playersInfo += '<td class="cardsDiv">' + player['cards'] + '</td>'
-                playersInfo += '<td class="coinsDiv">' + player['coins'] + '</td>'
-                playersInfo += '</tr>'
-            }
-            playersInfo += '</table>'
-
-            document.getElementById("players_info").innerHTML = playersInfo;
+            updatePlayingPlayers(content['players'])
         }
     };
     xhttp.open("GET", "/game_info", true);
