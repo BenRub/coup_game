@@ -1,3 +1,5 @@
+import time
+import uuid
 from typing import Optional
 
 from flask import Flask, url_for
@@ -18,6 +20,7 @@ from flask import Response
 
 def create_app():
     # create and configure the app
+    appTimestamp = str(int(time.time()))
     app = Flask(__name__, instance_relative_config=True)
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     game = CoupGame()
@@ -30,21 +33,12 @@ def create_app():
     def handle_invalid_usage(error: CoupException):
         return error.message, 400
 
-    @app.route('/static/coup.js', methods=['GET'])
-    def coupJs():
-        return render_template('coup.js')
-
-    @app.route('/static/styles.css', methods=['GET'])
-    def stylesCss():
-        css = render_template('styles.css')
-        return Response(css, mimetype='text/css')
-
     @app.route('/')
     def index():
         if loggedIn():
             try:
                 player = getPlayer()
-                return render_template('hello.html', name=player.name)
+                return render_template('hello.html', name=player.name, appTimestamp=appTimestamp)
             except InvalidUsage:
                 pass
         return redirect(url_for('login'))
@@ -76,6 +70,7 @@ def create_app():
         player = getPlayer()
         game.ExposePlayer(player)
         session.pop('playerId', None)
+        del game.players[player.GetId()]
         return redirect(url_for('login'))
 
     def loggedIn() -> bool:
@@ -120,9 +115,9 @@ def create_app():
     @app.route('/open_card', methods=['POST'])
     def openCard():
         content = request.json
-        if 'cardName' not in content:
-            raise InvalidUsage("Card name not given", status_code=400)
-        game.OpenCard(getPlayer(), content['cardName'])
+        if 'cardId' not in content:
+            raise InvalidUsage("Card id not given", status_code=400)
+        game.OpenCard(getPlayer(), content['cardId'])
         return "", 200
 
     @app.route('/take_card_from_deck', methods=['POST'])
@@ -133,9 +128,9 @@ def create_app():
     @app.route('/return_card_to_deck', methods=['POST'])
     def returnCardToDeck():
         content = request.json
-        if 'cardName' not in content:
-            raise InvalidUsage("Card name not given", status_code=400)
-        game.ReturnCardToDeck(getPlayer(), content['cardName'])
+        if 'cardId' not in content:
+            raise InvalidUsage("Card id not given", status_code=400)
+        game.ReturnCardToDeck(getPlayer(), content['cardId'])
         return "", 200
 
     @app.route('/take_from_bank', methods=['POST'])

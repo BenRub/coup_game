@@ -61,8 +61,15 @@ class CoupGame:
         self.turn = self.playingPlayers[playerIndex + 1]
 
     def GetInfo(self, player):
+        allPlayers = []
+        for _, user in self.players.items():
+            allPlayers.append(user.GetName())
+
         playersInfo = {}
-        for _, gamePlayer in self.players.items():
+        for gamePlayer in self.playingPlayers:
+            if player == gamePlayer:
+                continue
+
             cards = []
             for card in gamePlayer.cards:
                 if card.Visible:
@@ -74,8 +81,12 @@ class CoupGame:
             playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
 
         playerCards = []
-        for card in player.cards:
-            playerCards.append(card.name)
+        for _, card in player.cards.items():
+            playerCards.append({
+                "cardId": card.GetId(),
+                "cardName": card.GetName(),
+                "visible": card.Visible,
+            })
 
         gameInfo = {
             "cards_names": self.cardsNames,
@@ -83,7 +94,8 @@ class CoupGame:
             "turn": self.turn.GetName() if self.turn else "",
             "my_cards": playerCards,
             "my_coins": player.coins,
-            "players": playersInfo
+            "players": playersInfo,
+            "all_players": allPlayers
         }
         return gameInfo
 
@@ -111,7 +123,7 @@ class CoupGame:
         return None
 
     def ExposePlayer(self, player: Player):
-        for _, card in player.cards:
+        for _, card in player.cards.items():
             card.Visible = True
 
     def getPlayerByName(self, playerName) -> Optional[Player]:
@@ -120,10 +132,10 @@ class CoupGame:
                 return player
         return None
 
-    def OpenCard(self, player: Player, cardName):
-        card = player.GetVisibleCard(cardName)
+    def OpenCard(self, player: Player, cardId):
+        card = player.GetCard(cardId)
         if not card:
-            raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
+            raise CoupException(f"Player {player.GetName()} does not have card id {cardId}")
         card.Visible = True
 
     def TakeCardFromDeck(self, player: Player):
@@ -133,14 +145,10 @@ class CoupGame:
         card = self.deck.pop()
         player.AddCard(card)
 
-    def ReturnCardToDeck(self, player: Player, cardName):
-        card = player.PopCard(cardName)
+    def ReturnCardToDeck(self, player: Player, cardId):
+        card = player.PopCard(cardId)
         if not card:
-            raise CoupException(f"Player {player.GetName()} does not have card {cardName}")
-
-        if card.Visible:
-            player.AddCard(card)
-            raise CoupException(f"Card {cardName} is visible & can't be returned to deck")
+            raise CoupException(f"Player {player.GetName()} does not have card id {cardId}")
 
         self.deck.append(card)
         self.shuffleDeck()

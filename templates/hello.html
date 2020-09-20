@@ -1,16 +1,40 @@
 <!doctype html>
 <title>Hello from Flask</title>
- <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles.css') }}">
+ <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ appTimestamp }}">
  <script type="text/javascript"
-         src="{{ url_for('static', filename='coup.js') }}"></script>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+         src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
 
 <div class="rootDiv">
-    <div><button type="button" onclick="startGame()">Start Game</button><input id="txtPlayerToStart" value=""></div>
+
+    <div class="header">
+
+        <div class="hello">
+            {% if name %}
+                Hello {{ name }}! (<a href="/logout">Logout</a>)
+            {% else %}
+              Who are you? (<a href="/logout">Logout</a>)
+            {% endif %}
+        </div>
+
+        <div class="startGame">
+            Player to start:
+            <select id="listOfPlayers">
+            </select>
+            <select id="cardNames" multiple="multiple">
+                <option>Banker</option>
+                <option>Capitalist</option>
+                <option>Crimeboss</option>
+                <option>Director</option>
+                <option>Writer</option>
+            </select>
+            <button type="button" onclick="startGame()">Start Game</button>
+        </div>
+
+    </div>
+
+    <div id="my_cards" class="my_cards">
+
+    </div>
 
     <div id="game_info">
 
@@ -20,7 +44,6 @@
 
     </div>
 
-    <div><button type="button" onclick="openCard()">Open Card</button><input id="txtCardToOpen" value=""></div>
     <div><button type="button" onclick="takeFromBank()">Take From Bank</button><input id="txtTakeFromBank" value="0"></div>
     <div><button type="button" onclick="payToBank()">Pay to Bank</button><input id="txtPayToBank" value="0"></div>
     <div><button type="button" onclick="transfer()">Transfer</button><input id="txtTransferSource" placeholder="from"><input id="txtTransferDst" placeholder="to"><input id="txtTransferCoins" value="0"></div>

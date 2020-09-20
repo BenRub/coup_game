@@ -8,12 +8,12 @@ class Player:
     def __init__(self, name):
         self.id = str(uuid.uuid4())
         self.name = name
-        self.cards = []
+        self.cards = {}
         self.coins = 0
 
     def Reset(self):
         self.coins = 2
-        self.cards = []
+        self.cards = {}
 
     def GetId(self):
         return self.id
@@ -21,31 +21,19 @@ class Player:
     def GetName(self):
         return self.name
 
-    def GetCard(self, cardName) -> Optional[Card]:
-        for card in self.cards:
-            if card.GetName().lower() == cardName.lower():
-                return card
-        return None
-
-    def GetVisibleCard(self, cardName) -> Optional[Card]:
-        for card in self.cards:
-            if card.GetName().lower() == cardName.lower() and not card.Visible:
-                return card
-        return None
+    def GetCard(self, cardId) -> Optional[Card]:
+        if cardId not in self.cards:
+            return None
+        return self.cards[cardId]
 
     def AddCard(self, card):
-        self.cards.append(card)
+        self.cards[card.GetId()] = card
 
-    def PopCard(self, cardName):
-        cardToPop = self.GetCard(cardName)
+    def PopCard(self, cardId) -> Optional[Card]:
+        cardToPop = self.GetCard(cardId)
         if not cardToPop:
             return None
 
-        newCards = []
-        for card in self.cards:
-            if card is not cardToPop:
-                newCards.append(card)
-
-        self.cards = newCards
+        del self.cards[cardId]
 
         return cardToPop

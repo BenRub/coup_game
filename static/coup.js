@@ -1,3 +1,5 @@
+let all_players_names = []
+
 function getGameInfo() {
     let xhttp = new XMLHttpRequest();
 
@@ -6,6 +8,44 @@ function getGameInfo() {
         if (this.readyState === 4 && this.status === 200) {
             let content = JSON.parse(this.response);
 
+            for (let playerNameIndex in all_players_names) {
+                let playerName = all_players_names[playerNameIndex]
+                let found = false
+                for (let parsedPlayerNameIndex in content['all_players']) {
+                    let parsedPlayerName = content['all_players'][parsedPlayerNameIndex]
+                    if (parsedPlayerName === playerName) {
+                        found = true
+                        break
+                    }
+                }
+
+                if (!found) {
+                    document.getElementById("player_option_" + playerName).remove()
+                }
+            }
+
+            let cbListOfPlayers = document.getElementById("listOfPlayers")
+            for (let parsedPlayerNameIndex in content['all_players']) {
+                let parsedPlayerName = content['all_players'][parsedPlayerNameIndex]
+                let found = false
+                for (let playerNameIndex in all_players_names) {
+                    let playerName = all_players_names[playerNameIndex]
+                    if (parsedPlayerName === playerName) {
+                        found = true
+                        break
+                    }
+                }
+
+                if (!found) {
+                    let option = document.createElement("option");
+                    option.innerText = parsedPlayerName
+                    option.id = "player_option_" + parsedPlayerName
+                    cbListOfPlayers.appendChild(option)
+                }
+            }
+
+            all_players_names = content['all_players']
+
             let gameInfo = ''
             gameInfo += '<div>Cards Names: ' + content['cards_names'] + '</div>'
             gameInfo += '<div>Deck Size: ' + content['deck_size'] + '</div>'
@@ -13,6 +53,24 @@ function getGameInfo() {
             gameInfo += '<div class="emptyLine"></div>'
 
             document.getElementById("game_info").innerHTML = gameInfo;
+
+            let myCardsElem = document.getElementById("my_cards")
+            myCardsElem.innerHTML = ''
+            for (let cardIndex in content['my_cards']) {
+                let myCard = content['my_cards'][cardIndex]
+                let cardElement = document.createElement("div")
+                cardElement.className = "card " + myCard["cardName"].toLowerCase()
+                if (myCard["visible"]) {
+                    cardElement.className += " exposed"
+                } else {
+                    cardElement.onclick = function() {
+                        if (confirm("Are you sure you want to expose your " + myCard["cardName"] + "?")) {
+                            openCard(myCard["cardId"])
+                        }
+                    }
+                }
+                myCardsElem.appendChild(cardElement)
+            }
 
             let myInfo = ''
             myInfo += '<div>My Cards: ' + content['my_cards'] + '</div>'
@@ -44,7 +102,22 @@ function getGameInfo() {
     xhttp.send();
 }
 
-window.setInterval(getGameInfo, 1000);
+window.setInterval(getGameInfo, 2000);
+
+function getSelectValues(select) {
+  let result = [];
+  let options = select && select.options;
+  let opt;
+
+  for (let i=0, iLen=options.length; i<iLen; i++) {
+    opt = options[i];
+
+    if (opt.selected) {
+      result.push(opt.value || opt.text);
+    }
+  }
+  return result;
+}
 
 function startGame() {
     let xhttp = new XMLHttpRequest();
@@ -54,14 +127,15 @@ function startGame() {
                 alert(this.responseText)
         }
     };
-    let playerName = document.getElementById("txtPlayerToStart").value
+    let playerName = document.getElementById("listOfPlayers").value
+    let cardNames = getSelectValues(document.getElementById("cardNames"))
     xhttp.open("POST", "/start_game", true);
-    let data = JSON.stringify({"cardNames": ["capitalist", "writer", "communist", "Protestor", "Gurrialla"], "playerToStart": playerName});
+    let data = JSON.stringify({"cardNames": cardNames, "playerToStart": playerName});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }
 
-function openCard() {
+function openCard(cardId) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -69,9 +143,8 @@ function openCard() {
                 alert(this.responseText)
         }
     };
-    let cardName = document.getElementById("txtCardToOpen").value
     xhttp.open("POST", "/open_card", true);
-    let data = JSON.stringify({"cardName": cardName});
+    let data = JSON.stringify({"cardId": cardId});
     xhttp.setRequestHeader("content-type", "application/json")
     xhttp.send(data);
 }

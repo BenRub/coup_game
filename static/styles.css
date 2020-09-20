@@ -1,0 +1,93 @@
+body {
+    background-image: url("/static/bg.jpg");
+    padding: 0;
+    margin: 0;
+    font-family: Arial, serif;
+}
+
+.rootDiv {
+    width: 100%;
+}
+
+.header {
+    width: 100%;
+    background: #505087;
+    color: white;
+    font-size: 14px;
+    padding-top: 5px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header .hello {
+    margin-left: 5px;
+}
+
+.header .startGame {
+    margin-right: 5px;
+}
+
+.header a {
+    color: #a4a4cd;
+    text-decoration: none;
+}
+
+.my_cards {
+    width: 30%;
+    margin: 5px auto auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.my_cards .card {
+    width: 159px;
+    height: 255px;
+    object-fit: cover;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.my_cards .banker {
+    background-image: url("/static/cards_images/banker.jpeg") ;
+}
+
+.my_cards .capitalist {
+    background-image: url("/static/cards_images/capitalist.jpeg") ;
+}
+
+.my_cards .crimeboss {
+    background-image: url("/static/cards_images/crimeboss.jpeg") ;
+}
+
+.my_cards .director {
+    background-image: url("/static/cards_images/director.jpeg") ;
+}
+
+.my_cards .writer {
+    background-image: url("/static/cards_images/writer.jpeg") ;
+}
+
+.my_cards .exposed {
+    opacity: 0.4;
+}
+
+.nameDiv {
+    width: 100px;
+}
+
+.cardsDiv {
+    width: 200px;
+}
+
+.coinsDiv {
+    width: 200px;
+}
+
+.emptyLine {
+    height: 10px;
+}
