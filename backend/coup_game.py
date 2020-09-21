@@ -126,7 +126,7 @@ class CoupGame:
         random.shuffle(self.deck)
 
     def RegisterPlayer(self, name) -> Player:
-        if name in self.players:
+        if self.getPlayerByName(name) is not None:
             raise CoupException(f"{name} is already in the game")
 
         player = Player(name)
