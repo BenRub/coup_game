@@ -94,6 +94,7 @@ class CoupGame:
             playersInfo[gamePlayer.GetName()] = {}
             playersInfo[gamePlayer.GetName()]["cards"] = cards
             playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
+            playersInfo[gamePlayer.GetName()]["is_ghost"] = gamePlayer.GetId() not in self.players
 
         playerCards = {}
         for _, card in player.cards.items():

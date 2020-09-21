@@ -150,7 +150,14 @@ function updatePlayingPlayers(turn, playersJson) {
 
         let playerNameDiv = document.createElement("div")
         playerNameDiv.className = "player_name"
-        playerNameDiv.innerText = playerName
+        let nameSpanElem = document.createElement("span")
+        nameSpanElem.innerText = playerName
+        playerNameDiv.appendChild(nameSpanElem)
+        if (player['is_ghost']) {
+            let ghostImg = document.createElement("img")
+            ghostImg.src = "/static/ghost-icon.png"
+            playerNameDiv.appendChild(ghostImg)
+        }
         playingPlayerDiv.appendChild(playerNameDiv)
 
         let playerCardsDiv = document.createElement("div")
