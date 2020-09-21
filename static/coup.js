@@ -86,15 +86,15 @@ function dragCoinsFromMyself(ev) {
     ev.dataTransfer.setData("coinsFromMyself", "yes");
 }
 
-function dropToCard(ev) {
+async function dropToCard(ev) {
     ev.preventDefault();
     if (ev.dataTransfer.getData("fromDeck") !== "yes") {
         return
     }
-    takeCardFromDeck()
+    await takeCardFromDeck()
 }
 
-function dropToCoins(ev) {
+async function dropToCoins(ev) {
     ev.preventDefault();
     if (ev.dataTransfer.getData("fromBank") !== "yes") {
         return
@@ -102,17 +102,17 @@ function dropToCoins(ev) {
 
     let coins = prompt("How many coins you want to take from the bank?", "0");
     if (coins != null) {
-        takeFromBank(coins)
+        await takeFromBank(coins)
     }
 }
 
-function dropToDeck(ev) {
+async function dropToDeck(ev) {
     ev.preventDefault();
     let cardId = ev.dataTransfer.getData("cardId");
-    returnCardToDeck(cardId)
+    await returnCardToDeck(cardId)
 }
 
-function dropToBank(ev) {
+async function dropToBank(ev) {
     ev.preventDefault();
     if (ev.dataTransfer.getData("coinsFromMyself") !== "yes") {
         return
@@ -120,11 +120,11 @@ function dropToBank(ev) {
 
     let coins = prompt("How many coins you want to pay the bank?", "0");
     if (coins != null) {
-        payToBank(coins)
+        await payToBank(coins)
     }
 }
 
-function dropToPlayer(playerToPay, ev) {
+async function dropToPlayer(playerToPay, ev) {
     ev.preventDefault();
     if (ev.dataTransfer.getData("coinsFromMyself") !== "yes") {
         return
@@ -132,6 +132,6 @@ function dropToPlayer(playerToPay, ev) {
 
     let coins = prompt("How many coins you want to transfer to " + playerToPay + "?", "0");
     if (coins != null) {
-        transfer(playerToPay, coins)
+        await transfer(playerToPay, coins)
     }
 }

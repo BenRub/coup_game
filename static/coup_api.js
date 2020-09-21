@@ -1,130 +1,66 @@
-function startGame() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 204)
-                alert(this.responseText)
-        }
-    };
-    let playerName = document.getElementById("listOfPlayers").value
-    xhttp.open("POST", "/start_game", true);
-    let data = JSON.stringify({"cardNames": getSelectedCards(), "playerToStart": playerName});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+async function sendRequest(url, data=undefined) {
+    let bodyToSent = data ? JSON.stringify(data) : null
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: bodyToSent,
+    })
+    if (!response.ok) {
+        let message = await response.text()
+        alert(message)
+    }
 }
 
-function kickPlayer() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 204)
-                alert(this.responseText)
-        }
-    };
-    let playerName = document.getElementById("listOfPlayers").value
-    xhttp.open("POST", "/kick_player", true);
-    let data = JSON.stringify({"playerToKick": playerName});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+let listOfPlayersElement = undefined
+
+async function startGame() {
+    if (listOfPlayersElement === undefined) {
+        listOfPlayersElement = document.getElementById("listOfPlayers")
+    }
+
+    let playerName = listOfPlayersElement.value
+    await sendRequest('/start_game', {"cardNames": getSelectedCards(), "playerToStart": playerName})
 }
 
-function openCard(cardId) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/open_card", true);
-    let data = JSON.stringify({"cardId": cardId});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+async function kickPlayer() {
+    if (listOfPlayersElement === undefined) {
+        listOfPlayersElement = document.getElementById("listOfPlayers")
+    }
+
+    let playerName = listOfPlayersElement.value
+    await sendRequest('/kick_player', {"playerToKick": playerName})
 }
 
-function takeOneFromBank() {
-    takeFromBank(1)
+async function openCard(cardId) {
+    await sendRequest('/open_card', {"cardId": cardId})
 }
 
-function takeFromBank(coins) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/take_from_bank", true);
-    let data = JSON.stringify({"coins": coins});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+async function takeOneFromBank() {
+    await takeFromBank(1)
 }
 
-function payToBank(coins) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/pay_to_bank", true);
-    let data = JSON.stringify({"coins": coins});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+async function takeFromBank(coins) {
+    await sendRequest('/take_from_bank', {"coins": coins})
 }
 
-function transfer(player_name_dst, coins) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/transfer", true);
-    let data = JSON.stringify({"player_name_dst": player_name_dst, "coins": coins});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+async function payToBank(coins) {
+    await sendRequest('/pay_to_bank', {"coins": coins})
 }
 
-function takeCardFromDeck() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/take_card_from_deck", true);
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send();
+async function transfer(player_name_dst, coins) {
+    await sendRequest('/transfer', {"player_name_dst": player_name_dst, "coins": coins})
 }
 
-function returnCardToDeck(cardId) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/return_card_to_deck", true);
-    let data = JSON.stringify({"cardId": cardId});
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send(data);
+async function takeCardFromDeck() {
+    await sendRequest('/take_card_from_deck')
 }
 
-function endTurn() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status !== 200)
-                alert(this.responseText)
-        }
-    };
-    xhttp.open("POST", "/end_turn", true);
-    xhttp.setRequestHeader("content-type", "application/json")
-    xhttp.send();
+async function returnCardToDeck(cardId) {
+    await sendRequest('/return_card_to_deck', {"cardId": cardId})
 }
 
+async function endTurn() {
+    await sendRequest('/end_turn')
+}

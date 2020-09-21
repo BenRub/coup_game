@@ -99,9 +99,9 @@ function updateMyCards(turn, myName, myCardsJson) {
         if (myCard["visible"]) {
             cardElement.className += " exposed"
         } else {
-            cardElement.onclick = function () {
+            cardElement.onclick = async function () {
                 if (confirm("Are you sure you want to expose your " + myCard["cardName"] + "?")) {
-                    openCard(myCard["cardId"])
+                    await openCard(myCard["cardId"])
                 }
             }
         }
