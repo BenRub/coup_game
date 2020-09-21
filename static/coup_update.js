@@ -63,9 +63,15 @@ function updateEndTurnAccess(turn, myName) {
 let myCardsElem = undefined
 let myCardsElements = {}
 
-function updateMyCards(myCardsJson) {
+function updateMyCards(turn, myName, myCardsJson) {
     if (myCardsElem === undefined) {
         myCardsElem = document.getElementById("my_cards")
+    }
+
+    if (turn === myName) {
+        myCardsElem.className = "my_cards myTurn"
+    } else {
+        myCardsElem.className = "my_cards"
     }
 
     for (let cardIdLocal in myCardsElements) {
@@ -184,7 +190,7 @@ function getGameInfo() {
             updateDeckSize(content['deck_size'])
             updateCardsNamesThatAreBeingPlayed(content['cards_names'])
             updateEndTurnAccess(content['turn'], content['my_name'])
-            updateMyCards(content['my_cards'])
+            updateMyCards(content['turn'], content['my_name'], content['my_cards'])
             updateMyCoins(content['my_coins'])
             updatePlayingPlayers(content['turn'], content['players'])
         }

@@ -98,7 +98,7 @@ body {
 .my_info {
     width: 100%;
     margin-top: 5px;
-    height: 217px;
+    height: 247px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -119,6 +119,9 @@ body {
 }
 
 .my_cards {
+    border: 1px solid gray;
+    background-color: #efefef;
+    border-radius: 8px;
     margin-left: 25%;
     width: 40%;
     display: flex;
@@ -126,13 +129,16 @@ body {
     justify-content: space-between;
 }
 
+.myTurn {
+    background: #ffe191;
+}
+
 .my_cards .card {
     width: 135px;
     height: 217px;
     background-repeat: no-repeat;
     background-size: contain;
-    margin-left: 2px;
-    margin-right: 2px;
+    margin: 15px;
 }
 
 .capitalist {
