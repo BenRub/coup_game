@@ -144,8 +144,8 @@ function updatePlayingPlayers(turn, playersJson) {
             playingPlayerDiv.className += " turn"
         }
         playingPlayerDiv.ondragover = allowDrop
-        playingPlayerDiv.ondrop = function (ev) {
-            dropToPlayer(playerName, ev)
+        playingPlayerDiv.ondrop = async function (ev) {
+            await dropToPlayer(playerName, ev)
         }
 
         let playerNameDiv = document.createElement("div")
