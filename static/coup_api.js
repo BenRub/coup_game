@@ -13,6 +13,21 @@ function startGame() {
     xhttp.send(data);
 }
 
+function kickPlayer() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            if (this.status !== 204)
+                alert(this.responseText)
+        }
+    };
+    let playerName = document.getElementById("listOfPlayers").value
+    xhttp.open("POST", "/kick_player", true);
+    let data = JSON.stringify({"playerToKick": playerName});
+    xhttp.setRequestHeader("content-type", "application/json")
+    xhttp.send(data);
+}
+
 function openCard(cardId) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {

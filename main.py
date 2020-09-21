@@ -91,6 +91,13 @@ def create_app():
     def gameInfo():
         return jsonify(game.GetInfo(getPlayer())), 200
 
+    @app.route('/kick_player', methods=['POST'])
+    def startGame():
+        content = request.json
+        if 'playerToKick' not in content:
+            raise InvalidUsage("Player to kick not given", status_code=400)
+        game.KickPlayer(content['playerToKick'])
+
     @app.route('/start_game', methods=['POST'])
     def startGame():
         content = request.json

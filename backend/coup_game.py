@@ -125,6 +125,9 @@ class CoupGame:
     def shuffleDeck(self):
         random.shuffle(self.deck)
 
+    def KickPlayer(self, playerToKick):
+        pass
+
     def RegisterPlayer(self, name) -> Player:
         if self.getPlayerByName(name) is not None:
             raise CoupException(f"{name} is already in the game")
