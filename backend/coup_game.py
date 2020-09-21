@@ -126,7 +126,11 @@ class CoupGame:
         random.shuffle(self.deck)
 
     def KickPlayer(self, playerToKick):
-        pass
+        player = self.getPlayerByName(playerToKick)
+        if player is None:
+            raise CoupException(f"No player with name {playerToKick}")
+
+        self.UnregisterPlayer(player)
 
     def RegisterPlayer(self, name) -> Player:
         if self.getPlayerByName(name) is not None:
@@ -135,6 +139,10 @@ class CoupGame:
         player = Player(name)
         self.players[player.GetId()] = player
         return player
+
+    def UnregisterPlayer(self, player: Player):
+        self.ExposePlayer(player)
+        del self.players[player.GetId()]
 
     def GetPlayer(self, playerId) -> Optional[Player]:
         if playerId in self.players:

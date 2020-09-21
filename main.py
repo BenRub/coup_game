@@ -65,9 +65,8 @@ def create_app():
         if not loggedIn():
             return redirect(url_for('login'))
         player = getPlayer()
-        game.ExposePlayer(player)
+        game.UnregisterPlayer(player)
         session.pop('playerId', None)
-        del game.players[player.GetId()]
         return redirect(url_for('login'))
 
     def loggedIn() -> bool:
@@ -92,11 +91,12 @@ def create_app():
         return jsonify(game.GetInfo(getPlayer())), 200
 
     @app.route('/kick_player', methods=['POST'])
-    def startGame():
+    def kickPlayer():
         content = request.json
         if 'playerToKick' not in content:
             raise InvalidUsage("Player to kick not given", status_code=400)
         game.KickPlayer(content['playerToKick'])
+        return "", 204
 
     @app.route('/start_game', methods=['POST'])
     def startGame():
