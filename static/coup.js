@@ -5,7 +5,7 @@ let cardsToSelect = {
     "communist": true,
     "guerrilla": false,
     "protester": true,
-    "writer": false
+    "director": false
 }
 
 let cardsCreated = false

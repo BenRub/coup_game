@@ -157,8 +157,8 @@ body {
     background-image: url("/static/cards_images/protester.jpeg");
 }
 
-.writer {
-    background-image: url("/static/cards_images/writer.jpeg");
+.director {
+    background-image: url("/static/cards_images/director.jpeg");
 }
 
 .--hidden-- {
