@@ -191,22 +191,21 @@ function updatePlayingPlayers(turn, playersJson) {
     }
 }
 
-function getGameInfo() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            let content = JSON.parse(this.response);
-            updateAllPlayersNames(content['all_players'])
-            updateDeckSize(content['deck_size'])
-            updateCardsNamesThatAreBeingPlayed(content['cards_names'])
-            updateEndTurnAccess(content['turn'], content['my_name'])
-            updateMyCards(content['turn'], content['my_name'], content['my_cards'])
-            updateMyCoins(content['my_coins'])
-            updatePlayingPlayers(content['turn'], content['players'])
+async function getGameInfo() {
+    const response = await fetch("/game_info", {method: 'GET'})
+    if (!response.ok) {
+        if (response.status === 401) {
+            window.location = "/"
         }
-    };
-    xhttp.open("GET", "/game_info", true);
-    xhttp.send();
+    }
+    let content = await response.json()
+    updateAllPlayersNames(content['all_players'])
+    updateDeckSize(content['deck_size'])
+    updateCardsNamesThatAreBeingPlayed(content['cards_names'])
+    updateEndTurnAccess(content['turn'], content['my_name'])
+    updateMyCards(content['turn'], content['my_name'], content['my_cards'])
+    updateMyCoins(content['my_coins'])
+    updatePlayingPlayers(content['turn'], content['players'])
 }
 
 window.setInterval(getGameInfo, 1000);
