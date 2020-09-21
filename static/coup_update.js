@@ -112,8 +112,20 @@ function updateMyCoins(myCoins) {
     let threeCoinsAmount = Math.floor(myCoins / 3)
     let oneCoinAmount = myCoins - 3 * threeCoinsAmount
 
-    document.getElementById("oneCoinAmount").innerText = oneCoinAmount + ""
-    document.getElementById("threeCoinsAmount").innerText = threeCoinsAmount + ""
+    document.getElementById("oneCoinAmount").innerText = ''
+    document.getElementById("threeCoinsAmount").innerText = ''
+
+    for (let i = 0; i < oneCoinAmount; i++) {
+        let imgElem = document.createElement("img")
+        imgElem.src = "/static/one_coin.png"
+        document.getElementById("oneCoinAmount").appendChild(imgElem)
+    }
+
+    for (let i = 0; i < threeCoinsAmount; i++) {
+        let imgElem = document.createElement("img")
+        imgElem.src = "/static/three_coins.png"
+        document.getElementById("threeCoinsAmount").appendChild(imgElem)
+    }
 }
 
 let playingPlayersElem = undefined
