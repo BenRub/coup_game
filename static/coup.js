@@ -1,11 +1,11 @@
 let all_players_names = []
 
 let cardsToSelect = {
-    "capitalist": false,
+    "capitalist": true,
     "communist": true,
-    "guerrilla": false,
+    "guerrilla": true,
     "protester": true,
-    "director": false
+    "director": true
 }
 
 let cardsCreated = false
