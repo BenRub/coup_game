@@ -170,21 +170,19 @@ function updatePlayingPlayers(turn, playersJson) {
         let oneCoinAmount = player['coins'] - 3 * threeCoinsAmount
 
         let oneCoinDiv = document.createElement("div")
-        let oneCoinSpan = document.createElement("span")
-        oneCoinSpan.innerText = oneCoinAmount + " X "
-        oneCoinDiv.appendChild(oneCoinSpan)
-        let oneCoinImg = document.createElement("img")
-        oneCoinImg.src = "/static/one_coin.png"
-        oneCoinDiv.appendChild(oneCoinImg)
+        for (let i = 0; i < oneCoinAmount; i++) {
+            let oneCoinImg = document.createElement("img")
+            oneCoinImg.src = "/static/one_coin.png"
+            oneCoinDiv.appendChild(oneCoinImg)
+        }
         playerCoinsDiv.appendChild(oneCoinDiv)
 
         let threeCoinsDiv = document.createElement("div")
-        let threeCoinsSpan = document.createElement("span")
-        threeCoinsSpan.innerText = threeCoinsAmount + " X "
-        threeCoinsDiv.appendChild(threeCoinsSpan)
-        let threeCoinsImg = document.createElement("img")
-        threeCoinsImg.src = "/static/three_coins.png"
-        threeCoinsDiv.appendChild(threeCoinsImg)
+        for (let i = 0; i < threeCoinsAmount; i++) {
+            let threeCoinsImg = document.createElement("img")
+            threeCoinsImg.src = "/static/three_coins.png"
+            threeCoinsDiv.appendChild(threeCoinsImg)
+        }
         playerCoinsDiv.appendChild(threeCoinsDiv)
 
         playingPlayerDiv.appendChild(playerCoinsDiv)
