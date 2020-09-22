@@ -127,7 +127,7 @@ class CoupGame:
         return cards
 
     def shuffleDeck(self):
-        for _ in range(3):
+        for _ in range(10):
             random.shuffle(self.deck)
 
     def KickPlayer(self, playerToKick):
