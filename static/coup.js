@@ -152,7 +152,7 @@ async function dropToPlayer(enemyPlayer, ev) {
         if (coins != null) {
             await transfer(enemyPlayer, coins)
         }
-    } else if (ev.dataTransfer.getData("taxFromBase") === "yes") {
+    } else if (ev.dataTransfer.getData("taxFromBase") === "yes" || ev.dataTransfer.getData("taxFromMyself") === "yes") {
         await tax(enemyPlayer)
     }
 
