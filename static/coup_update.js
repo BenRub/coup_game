@@ -214,4 +214,4 @@ async function getGameInfo() {
     isUpdating = false
 }
 
-window.setInterval(getGameInfo, 700);
+window.setInterval(getGameInfo, 1200);
