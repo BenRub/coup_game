@@ -163,4 +163,17 @@ def create_app():
         game.Transfer(getPlayer(), content['player_name_dst'], int(content['coins']))
         return "", 200
 
+    @app.route('/tax', methods=['POST'])
+    def tax():
+        content = request.json
+        if 'player_name_dst' not in content:
+            raise InvalidUsage("Player source not given", status_code=400)
+        game.Tax(content['player_name_dst'])
+        return "", 200
+
+    @app.route('/return_tax_to_base', methods=['POST'])
+    def returnTaxToBase():
+        game.ReturnTaxToBase()
+        return "", 200
+
     return app

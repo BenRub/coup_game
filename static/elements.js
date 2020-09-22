@@ -6,6 +6,22 @@ function getCbListOfPlayers() {
     return cbListOfPlayers
 }
 
+let taxElement = undefined
+function getTaxElement() {
+    if (taxElement === undefined) {
+        taxElement = document.getElementById("tax")
+    }
+    return taxElement
+}
+
+let taxOnMeElement = undefined
+function getTaxOnMeElement() {
+    if (taxOnMeElement === undefined) {
+        taxOnMeElement = document.getElementById("tax_on_me_element")
+    }
+    return taxOnMeElement
+}
+
 let deckSizeElement = undefined
 function getDeckSizeElement() {
     if (deckSizeElement === undefined) {

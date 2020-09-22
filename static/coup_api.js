@@ -46,6 +46,14 @@ async function transfer(player_name_dst, coins) {
     await sendRequest('/transfer', {"player_name_dst": player_name_dst, "coins": coins})
 }
 
+async function tax(player_name_dst) {
+    await sendRequest('/tax', {"player_name_dst": player_name_dst})
+}
+
+async function returnTaxToBase() {
+    await sendRequest('/return_tax_to_base')
+}
+
 async function takeCardFromDeck() {
     await sendRequest('/take_card_from_deck')
 }
