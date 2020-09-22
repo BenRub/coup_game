@@ -190,6 +190,7 @@ function updatePlayingPlayers(turn, tax, playersJson) {
     }
 }
 
+let isUpdating = false
 async function getGameInfo() {
     const response = await fetch("/game_info", {method: 'GET'})
     if (!response.ok) {
@@ -197,6 +198,10 @@ async function getGameInfo() {
             window.location = "/"
         }
     }
+    while (isUpdating) {
+
+    }
+    isUpdating = true
     let content = await response.json()
     updateAllPlayersNames(content['all_players'])
     updateDeckSize(content['deck_size'])
@@ -206,6 +211,7 @@ async function getGameInfo() {
     updateMyCoins(content['my_coins'])
     updateTax(content['tax'], content['my_name'])
     updatePlayingPlayers(content['turn'], content['tax'], content['players'])
+    isUpdating = false
 }
 
-window.setInterval(getGameInfo, 1000);
+window.setInterval(getGameInfo, 700);
