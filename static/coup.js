@@ -1,5 +1,3 @@
-let all_players_names = []
-
 let cardsToSelect = {
     "capitalist": true,
     "communist": true,
@@ -21,13 +19,12 @@ function getSelectedCards() {
 }
 
 function createAllCards() {
-    let tableElement = document.getElementById("cardsTable")
     let items = 0
     let trElem = undefined
     for (let cardName in cardsToSelect) {
         if (items % 3 === 0) {
             if (trElem) {
-                tableElement.appendChild(trElem)
+                getCardsTableElement().appendChild(trElem)
             }
             trElem = document.createElement("tr")
         }
@@ -51,11 +48,11 @@ function createAllCards() {
         trElem.appendChild(tdElem)
         items++
     }
-    tableElement.appendChild(trElem)
+    getCardsTableElement().appendChild(trElem)
 }
 
 function openCardsPopup() {
-  document.getElementById("allCards").className = "allCardsOpen";
+  getAllCardsElement().className = "allCardsOpen";
   if (!cardsCreated) {
       createAllCards()
       cardsCreated = true
@@ -63,7 +60,7 @@ function openCardsPopup() {
 }
 
 function closeCardsPopup() {
-    document.getElementById("allCards").className = "allCardsClosed"
+    getAllCardsElement().className = "allCardsClosed"
 }
 
 function allowDrop(ev) {

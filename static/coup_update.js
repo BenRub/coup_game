@@ -1,11 +1,5 @@
-let cbListOfPlayers = undefined
 let myPlayersOptions = {}
-
 function updateAllPlayersNames(allPlayersJson) {
-    if (cbListOfPlayers === undefined) {
-        cbListOfPlayers = document.getElementById("listOfPlayers")
-    }
-
     for (let playerNameLocal in myPlayersOptions) {
         if (!(playerNameLocal in allPlayersJson)) {
             myPlayersOptions[playerNameLocal].remove()
@@ -21,58 +15,32 @@ function updateAllPlayersNames(allPlayersJson) {
         let option = document.createElement("option");
         option.innerText = parsedPlayerName
         myPlayersOptions[parsedPlayerName] = option
-        cbListOfPlayers.appendChild(option)
+        getCbListOfPlayers().appendChild(option)
     }
 }
-
-let deckSizeElement = undefined
 
 function updateDeckSize(deck_size) {
-    if (deckSizeElement === undefined) {
-        deckSizeElement = document.getElementById("deckSize")
-    }
-
-    deckSizeElement.innerText = deck_size + " cards"
+    getDeckSizeElement().innerText = deck_size + " cards"
 }
-
-let cardsNamesThatAreBeingPlayedElement = undefined
 
 function updateCardsNamesThatAreBeingPlayed(cards_names) {
-    if (cardsNamesThatAreBeingPlayedElement === undefined) {
-        cardsNamesThatAreBeingPlayedElement = document.getElementById("cardsNamesThatAreBeingPlayed")
-    }
-
-    cardsNamesThatAreBeingPlayedElement.innerText = cards_names
+    getCardsNamesThatAreBeingPlayedElement().innerText = cards_names
 }
-
-let endTurnButtonElement = undefined
 
 function updateEndTurnAccess(turn, myName) {
-    if (endTurnButtonElement === undefined) {
-        endTurnButtonElement = document.getElementById("endTurn")
-    }
-
     if (turn === myName) {
-        endTurnButtonElement.disabled = ""
+        getEndTurnButtonElement().disabled = ""
     } else {
-        endTurnButtonElement.className = ""
-        endTurnButtonElement.disabled = "disabled"
+        getEndTurnButtonElement().className = ""
+        getEndTurnButtonElement().disabled = "disabled"
     }
-
 }
 
-let myCardsElem = undefined
-let myCardsElements = {}
-
 function updateMyCards(turn, myName, myCardsJson) {
-    if (myCardsElem === undefined) {
-        myCardsElem = document.getElementById("my_cards")
-    }
-
     if (turn === myName) {
-        myCardsElem.className = "my_cards myTurn"
+        getMyCardsElem().className = "my_cards myTurn"
     } else {
-        myCardsElem.className = "my_cards"
+        getMyCardsElem().className = "my_cards"
     }
 
     for (let cardIdLocal in myCardsElements) {
@@ -93,7 +61,7 @@ function updateMyCards(turn, myName, myCardsJson) {
             cardElement.draggable = true
             cardElement.ondragstart = dragCardToDeck
             myCardsElements[cardId] = cardElement
-            myCardsElem.appendChild(cardElement)
+            getMyCardsElem().appendChild(cardElement)
         }
 
         cardElement.className = "card " + myCard["cardName"].toLowerCase()
@@ -113,29 +81,24 @@ function updateMyCoins(myCoins) {
     let threeCoinsAmount = Math.floor(myCoins / 3)
     let oneCoinAmount = myCoins - 3 * threeCoinsAmount
 
-    document.getElementById("oneCoinAmount").innerText = ''
-    document.getElementById("threeCoinsAmount").innerText = ''
+    getOneCoinAmountElement().innerText = ''
+    getThreeCoinsAmountElement().innerText = ''
 
     for (let i = 0; i < oneCoinAmount; i++) {
         let imgElem = document.createElement("img")
         imgElem.src = "/static/one_coin.png"
-        document.getElementById("oneCoinAmount").appendChild(imgElem)
+        getOneCoinAmountElement().appendChild(imgElem)
     }
 
     for (let i = 0; i < threeCoinsAmount; i++) {
         let imgElem = document.createElement("img")
         imgElem.src = "/static/three_coins.png"
-        document.getElementById("threeCoinsAmount").appendChild(imgElem)
+        getThreeCoinsAmountElement().appendChild(imgElem)
     }
 }
 
-let playingPlayersElem = undefined
-
 function updatePlayingPlayers(turn, playersJson) {
-    if (playingPlayersElem === undefined) {
-        playingPlayersElem = document.getElementById("playing_players")
-    }
-    playingPlayersElem.innerHTML = ''
+    getPlayingPlayersElem().innerHTML = ''
 
     for (let playerName in playersJson) {
         let player = playersJson[playerName]
@@ -195,7 +158,7 @@ function updatePlayingPlayers(turn, playersJson) {
 
         playingPlayerDiv.appendChild(playerCoinsDiv)
 
-        playingPlayersElem.appendChild(playingPlayerDiv)
+        getPlayingPlayersElem().appendChild(playingPlayerDiv)
     }
 }
 

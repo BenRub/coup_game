@@ -1,8 +1,4 @@
 async function sendRequest(url, data=undefined, changeButton=true) {
-    if (endTurnButtonElement === undefined) {
-        endTurnButtonElement = document.getElementById("endTurn")
-    }
-
     let bodyToSent = data ? JSON.stringify(data) : null
     const response = await fetch(url, {
       method: 'POST',
@@ -14,29 +10,19 @@ async function sendRequest(url, data=undefined, changeButton=true) {
     if (!response.ok) {
         let message = await response.text()
         alert(message)
-    } else if (changeButton && endTurnButtonElement.disabled !== "disabled") {
-        endTurnButtonElement.className = "pressMe"
+    } else if (changeButton && getEndTurnButtonElement().disabled !== "disabled") {
+        getEndTurnButtonElement().className = "pressMe"
     }
 }
 
-let listOfPlayersElement = undefined
-
 async function startGame() {
-    endTurnButtonElement.className = ""
-    if (listOfPlayersElement === undefined) {
-        listOfPlayersElement = document.getElementById("listOfPlayers")
-    }
-
-    let playerName = listOfPlayersElement.value
+    getEndTurnButtonElement().className = ""
+    let playerName = getListOfPlayersElement().value
     await sendRequest('/start_game', {"cardNames": getSelectedCards(), "playerToStart": playerName}, false)
 }
 
 async function kickPlayer() {
-    if (listOfPlayersElement === undefined) {
-        listOfPlayersElement = document.getElementById("listOfPlayers")
-    }
-
-    let playerName = listOfPlayersElement.value
+    let playerName = getListOfPlayersElement().value
     await sendRequest('/kick_player', {"playerToKick": playerName}, false)
 }
 
@@ -69,9 +55,6 @@ async function returnCardToDeck(cardId) {
 }
 
 async function endTurn() {
-    if (endTurnButtonElement === undefined) {
-        endTurnButtonElement = document.getElementById("endTurn")
-    }
     await sendRequest('/end_turn', undefined, false)
-    endTurnButtonElement.className = ""
+    getEndTurnButtonElement().className = ""
 }
