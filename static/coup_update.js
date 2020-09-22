@@ -55,6 +55,7 @@ function updateEndTurnAccess(turn, myName) {
     if (turn === myName) {
         endTurnButtonElement.disabled = ""
     } else {
+        endTurnButtonElement.className = ""
         endTurnButtonElement.disabled = "disabled"
     }
 

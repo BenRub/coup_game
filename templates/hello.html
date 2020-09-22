@@ -19,7 +19,6 @@
         <div class="hello">
             {% if name %}
                 Hello {{ name }}! (<a href="/logout">Logout</a>)
-                <button id="endTurn" type="button" onclick="endTurn()">End turn</button>
             {% else %}
                 Who are you? (<a href="/logout">Logout</a>)
             {% endif %}
@@ -41,6 +40,12 @@
 
     </div>
 
+
+    <div class="endTurnHolderBox">
+        <button id="endTurn" type="button" onclick="endTurn()">End turn</button>
+    </div>
+
+
     <div class="my_info">
         <div id="my_cards" class="my_cards" ondrop="dropToCard(event)" ondragover="allowDrop(event)">
 
@@ -54,7 +59,8 @@
     </div>
 
     <div class="deck_and_bank">
-        <div class="deck" draggable="true" onclick="takeCardFromDeck()" ondragstart="dragCardFromDeck(event)" ondrop="dropToDeck(event)"
+        <div class="deck" draggable="true" onclick="takeCardFromDeck()" ondragstart="dragCardFromDeck(event)"
+             ondrop="dropToDeck(event)"
              ondragover="allowDrop(event)">
             <span id="deckSize"></span>
         </div>
