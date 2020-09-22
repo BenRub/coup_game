@@ -118,6 +118,9 @@ async function dropToCoins(ev) {
 async function dropToDeck(ev) {
     ev.preventDefault();
     let cardId = ev.dataTransfer.getData("cardId");
+    if (!cardId || cardId === "") {
+        return
+    }
     await returnCardToDeck(cardId)
 }
 
