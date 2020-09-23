@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional
+from typing import Optional, Dict
 
 from backend.card import Card
 
@@ -8,38 +8,29 @@ class Player:
     def __init__(self, name):
         self.id = str(uuid.uuid4())
         self.name = name
-        self.cards = {}
+        self.cards: Dict[int, Card] = {}
         self.coins = 0
 
-    def Reset(self):
+    def reset(self):
         self.coins = 2
         self.cards = {}
 
-    def GetId(self):
-        return self.id
-
-    def GetName(self):
-        return self.name
-
-    def GetCard(self, cardId) -> Optional[Card]:
-        if cardId not in self.cards:
+    def get_card(self, card_id) -> Optional[Card]:
+        if card_id not in self.cards:
             return None
-        return self.cards[cardId]
+        return self.cards[card_id]
 
-    def AddCard(self, card):
-        self.cards[card.GetId()] = card
+    def add_card(self, card):
+        self.cards[card.id] = card
 
-    def PopCard(self, cardId) -> Optional[Card]:
-        cardToPop = self.GetCard(cardId)
-        if not cardToPop:
+    def pop_card(self, card_id) -> Optional[Card]:
+        card_to_pop = self.get_card(card_id)
+        if not card_to_pop:
             return None
 
-        del self.cards[cardId]
+        del self.cards[card_id]
 
-        return cardToPop
+        return card_to_pop
 
-    def AllCardsAreExposed(self) -> bool:
-        for _, card in self.cards.items():
-            if not card.Visible:
-                return False
-        return True
+    def is_out(self) -> bool:
+        return not any([card.visible for card in self.cards.values()])

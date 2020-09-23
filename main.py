@@ -17,7 +17,7 @@ from utils import is_list_of_strings
 
 def create_app():
     # create and configure the app
-    appTimestamp = str(int(time.time()))
+    app_timestamp = str(int(time.time()))
     app = Flask(__name__, instance_relative_config=True)
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     game = CoupGame()
@@ -32,10 +32,10 @@ def create_app():
 
     @app.route('/')
     def index():
-        if loggedIn():
+        if logged_in():
             try:
-                player = getPlayer()
-                return render_template('hello.html', name=player.name, appTimestamp=appTimestamp)
+                player = get_player()
+                return render_template('hello.html', name=player.name, appTimestamp=app_timestamp)
             except InvalidUsage:
                 pass
         return redirect(url_for('login'))
@@ -43,11 +43,11 @@ def create_app():
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         if request.method == 'POST':
-            if loggedIn():
+            if logged_in():
                 return redirect(url_for('index'))
 
             try:
-                player = game.RegisterPlayer(request.form['username'])
+                player = game.register_player(request.form['username'])
                 session['playerId'] = player.id
                 return redirect(url_for('index'))
             except CoupException as e:
@@ -62,44 +62,44 @@ def create_app():
 
     @app.route('/logout')
     def logout():
-        if not loggedIn():
+        if not logged_in():
             return redirect(url_for('login'))
-        player = getPlayer()
-        game.UnregisterPlayer(player)
+        player = get_player()
+        game.unregister_player(player)
         session.pop('playerId', None)
         return redirect(url_for('login'))
 
-    def loggedIn() -> bool:
+    def logged_in() -> bool:
         if 'playerId' not in session:
             return False
 
-        player = game.GetPlayer(session['playerId'])
+        player = game.get_player(session['playerId'])
         return bool(player)
 
-    def getPlayer() -> Optional[Player]:
+    def get_player() -> Optional[Player]:
         if 'playerId' not in session:
             raise InvalidUsage("No player id in session", status_code=401)
 
-        player = game.GetPlayer(session['playerId'])
+        player = game.get_player(session['playerId'])
         if not player:
             raise InvalidUsage("Game doesn't have the player id that was sent", status_code=401)
 
         return player
 
     @app.route('/game_info')
-    def gameInfo():
-        return jsonify(game.GetInfo(getPlayer())), 200
+    def game_info():
+        return jsonify(game.get_info(get_player())), 200
 
     @app.route('/kick_player', methods=['POST'])
-    def kickPlayer():
+    def kick_player():
         content = request.json
         if 'playerToKick' not in content:
             raise InvalidUsage("Player to kick not given", status_code=400)
-        game.KickPlayer(content['playerToKick'])
+        game.kick_player(content['playerToKick'])
         return "", 204
 
     @app.route('/start_game', methods=['POST'])
-    def startGame():
+    def start_game():
         content = request.json
         if 'cardNames' not in content:
             raise InvalidUsage("Cards names not given", status_code=400)
@@ -107,50 +107,50 @@ def create_app():
             raise InvalidUsage("Cards names is not list of strings", status_code=400)
         if 'playerToStart' not in content:
             raise InvalidUsage("Player to start not given", status_code=400)
-        game.Start(content['cardNames'], content['playerToStart'])
+        game.start(content['cardNames'], content['playerToStart'])
         return "", 204
 
     @app.route('/end_turn', methods=['POST'])
-    def endTurn():
-        player = getPlayer()
-        game.EndTurn(player)
+    def end_turn():
+        player = get_player()
+        game.end_turn(player)
         return "", 200
 
     @app.route('/open_card', methods=['POST'])
-    def openCard():
+    def open_card():
         content = request.json
         if 'cardId' not in content:
             raise InvalidUsage("Card id not given", status_code=400)
-        game.OpenCard(getPlayer(), content['cardId'])
+        game.open_card(get_player(), content['cardId'])
         return "", 200
 
     @app.route('/take_card_from_deck', methods=['POST'])
-    def takeCardFromDeck():
-        game.TakeCardFromDeck(getPlayer())
+    def take_card_from_deck():
+        game.take_card_from_deck(get_player())
         return "", 200
 
     @app.route('/return_card_to_deck', methods=['POST'])
-    def returnCardToDeck():
+    def return_card_to_deck():
         content = request.json
         if 'cardId' not in content:
             raise InvalidUsage("Card id not given", status_code=400)
-        game.ReturnCardToDeck(getPlayer(), content['cardId'])
+        game.return_card_to_deck(get_player(), content['cardId'])
         return "", 200
 
     @app.route('/take_from_bank', methods=['POST'])
-    def takeFromBank():
+    def take_from_bank():
         content = request.json
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.TakeFromBank(getPlayer(), int(content['coins']))
+        game.take_from_bank(get_player(), int(content['coins']))
         return "", 200
 
     @app.route('/pay_to_bank', methods=['POST'])
-    def payToBank():
+    def pay_to_bank():
         content = request.json
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.PayToBank(getPlayer(), int(content['coins']))
+        game.pay_to_bank(get_player(), int(content['coins']))
         return "", 200
 
     @app.route('/transfer', methods=['POST'])
@@ -160,7 +160,12 @@ def create_app():
             raise InvalidUsage("Player source not given", status_code=400)
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.Transfer(getPlayer(), content['player_name_dst'], int(content['coins']))
+        game.transfer(get_player(), content['player_name_dst'], int(content['coins']))
         return "", 200
 
     return app
+
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True, host="0.0.0.0", port=8000)
