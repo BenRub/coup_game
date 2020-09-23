@@ -1,4 +1,7 @@
 # coup_game
-Running the app:
-export FLASK_APP=main.py
-flask run
+
+Build:
+docker build . -t coup
+
+Run:
+docker run -d --name coup -p 80:80 coup

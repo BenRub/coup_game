@@ -16,6 +16,7 @@ class CoupGame:
         self.started = False
         self.game_over = False
         self.turn = None
+        self.tax = None
         self.card_names = []
         self.players = {}
         self.deck = []
@@ -29,6 +30,7 @@ class CoupGame:
         self.started = True
         self.game_over = False
         self.turn = player
+        self.tax = None
         self.card_names = card_names
         self.deck = self.create_cards(card_names)
         self.shuffle_deck()
@@ -111,6 +113,7 @@ class CoupGame:
             "deck_size": len(self.deck),
             "my_name": player.name,
             "turn": self.turn.name if self.turn else "",
+            "tax": self.tax,
             "my_cards": player_cards,
             "my_coins": player.coins,
             "players": players_info,
@@ -127,7 +130,8 @@ class CoupGame:
         return cards
 
     def shuffle_deck(self):
-        random.shuffle(self.deck)
+        for _ in range(10):
+            random.shuffle(self.deck)
 
     def kick_player(self, player_to_kick):
         player = self.get_player_by_name(player_to_kick)
@@ -217,3 +221,13 @@ class CoupGame:
 
         player.coins -= coins
         player_dst.coins += coins
+
+    def tax(self, player_name_dst):
+        player_dst = self.get_player_by_name(player_name_dst)
+        if not player_dst:
+            raise CoupException(f"No player with name {player_name_dst}")
+
+        self.tax = player_name_dst
+
+    def return_tax_to_base(self):
+        self.tax = None

@@ -35,7 +35,7 @@ function createAllCards() {
         if (cardsToSelect[cardName]) {
             imgElem.className = "selected"
         }
-        imgElem.onclick = function() {
+        imgElem.onclick = function () {
             if (cardsToSelect[cardName]) {
                 cardsToSelect[cardName] = false
                 imgElem.className = ""
@@ -52,11 +52,11 @@ function createAllCards() {
 }
 
 function openCardsPopup() {
-  getAllCardsElement().className = "allCardsOpen";
-  if (!cardsCreated) {
-      createAllCards()
-      cardsCreated = true
-  }
+    getAllCardsElement().className = "allCardsOpen";
+    if (!cardsCreated) {
+        createAllCards()
+        cardsCreated = true
+    }
 }
 
 function closeCardsPopup() {
@@ -75,12 +75,24 @@ function dragCardFromDeck(ev) {
     ev.dataTransfer.setData("fromDeck", "yes");
 }
 
+function dragTaxFromBase(ev) {
+    ev.dataTransfer.setData("taxFromBase", "yes");
+}
+
+function dragTaxFromEnemy(ev) {
+    ev.dataTransfer.setData("taxFromEnemy", "yes");
+}
+
 function dragCoinsFromBank(ev) {
     ev.dataTransfer.setData("fromBank", "yes");
 }
 
 function dragCoinsFromMyself(ev) {
     ev.dataTransfer.setData("coinsFromMyself", "yes");
+}
+
+function dragTaxFromMyself(ev) {
+    ev.dataTransfer.setData("taxFromMyself", "yes");
 }
 
 async function dropToCard(ev) {
@@ -106,7 +118,18 @@ async function dropToCoins(ev) {
 async function dropToDeck(ev) {
     ev.preventDefault();
     let cardId = ev.dataTransfer.getData("cardId");
+    if (!cardId || cardId === "") {
+        return
+    }
     await returnCardToDeck(cardId)
+}
+
+async function dropToTaxBase(ev) {
+    ev.preventDefault();
+    if (ev.dataTransfer.getData("taxFromEnemy") !== "yes" && ev.dataTransfer.getData("taxFromMyself") !== "yes") {
+        return
+    }
+    await returnTaxToBase()
 }
 
 async function dropToBank(ev) {
@@ -121,14 +144,17 @@ async function dropToBank(ev) {
     }
 }
 
-async function dropToPlayer(playerToPay, ev) {
+async function dropToPlayer(enemyPlayer, ev) {
     ev.preventDefault();
-    if (ev.dataTransfer.getData("coinsFromMyself") !== "yes") {
-        return
+
+    if (ev.dataTransfer.getData("coinsFromMyself") === "yes") {
+        let coins = prompt("How many coins you want to transfer to " + enemyPlayer + "?", "0");
+        if (coins != null) {
+            await transfer(enemyPlayer, coins)
+        }
+    } else if (ev.dataTransfer.getData("taxFromBase") === "yes" || ev.dataTransfer.getData("taxFromMyself") === "yes") {
+        await tax(enemyPlayer)
     }
 
-    let coins = prompt("How many coins you want to transfer to " + playerToPay + "?", "0");
-    if (coins != null) {
-        await transfer(playerToPay, coins)
-    }
+
 }

@@ -1,4 +1,5 @@
 let myPlayersOptions = {}
+
 function updateAllPlayersNames(allPlayersJson) {
     for (let playerNameLocal in myPlayersOptions) {
         if (!(playerNameLocal in allPlayersJson)) {
@@ -97,18 +98,36 @@ function updateMyCoins(myCoins) {
     }
 }
 
-function updatePlayingPlayers(turn, playersJson) {
+function updateTax(tax, myName) {
+    if (tax) {
+        getTaxElement().className = "tax tax_empty"
+    } else {
+        getTaxElement().className = "tax tax_full"
+    }
+
+    if (tax === myName) {
+        getTaxOnMeElement().className = "tax tax_full"
+    } else {
+        getTaxOnMeElement().className = "tax"
+    }
+}
+
+function updatePlayingPlayers(turn, tax, playersJson) {
     getPlayingPlayersElem().innerHTML = ''
 
     for (let playerName in playersJson) {
         let player = playersJson[playerName]
+
         let playingPlayerDiv = document.createElement("div")
         playingPlayerDiv.className = "playing_player"
+
+        let playingPlayerBox = document.createElement("div")
+        playingPlayerBox.className = "playing_player_box"
         if (playerName === turn) {
-            playingPlayerDiv.className += " turn"
+            playingPlayerBox.className += " turn"
         }
-        playingPlayerDiv.ondragover = allowDrop
-        playingPlayerDiv.ondrop = async function (ev) {
+        playingPlayerBox.ondragover = allowDrop
+        playingPlayerBox.ondrop = async function (ev) {
             await dropToPlayer(playerName, ev)
         }
 
@@ -122,7 +141,15 @@ function updatePlayingPlayers(turn, playersJson) {
             ghostImg.src = "/static/ghost-icon.png"
             playerNameDiv.appendChild(ghostImg)
         }
-        playingPlayerDiv.appendChild(playerNameDiv)
+        playingPlayerBox.appendChild(playerNameDiv)
+
+        let taxDiv = document.createElement("div")
+        if (tax === playerName) {
+            taxDiv.className += "tax tax_full"
+        }
+        taxDiv.draggable = true
+        taxDiv.ondragstart = dragTaxFromEnemy
+        playingPlayerBox.appendChild(taxDiv)
 
         let playerCardsDiv = document.createElement("div")
         playerCardsDiv.className = "player_cards"
@@ -132,7 +159,7 @@ function updatePlayingPlayers(turn, playersJson) {
             playerCardDiv.className = "player_card " + cardName
             playerCardsDiv.appendChild(playerCardDiv)
         }
-        playingPlayerDiv.appendChild(playerCardsDiv)
+        playingPlayerBox.appendChild(playerCardsDiv)
 
         let playerCoinsDiv = document.createElement("div")
         playerCoinsDiv.className = "player_coins"
@@ -156,12 +183,14 @@ function updatePlayingPlayers(turn, playersJson) {
         }
         playerCoinsDiv.appendChild(threeCoinsDiv)
 
-        playingPlayerDiv.appendChild(playerCoinsDiv)
+        playingPlayerBox.appendChild(playerCoinsDiv)
 
+        playingPlayerDiv.appendChild(playingPlayerBox)
         getPlayingPlayersElem().appendChild(playingPlayerDiv)
     }
 }
 
+let isUpdating = false
 async function getGameInfo() {
     const response = await fetch("/game_info", {method: 'GET'})
     if (!response.ok) {
@@ -169,6 +198,10 @@ async function getGameInfo() {
             window.location = "/"
         }
     }
+    while (isUpdating) {
+
+    }
+    isUpdating = true
     let content = await response.json()
     updateAllPlayersNames(content['all_players'])
     updateDeckSize(content['deck_size'])
@@ -176,7 +209,9 @@ async function getGameInfo() {
     updateEndTurnAccess(content['turn'], content['my_name'])
     updateMyCards(content['turn'], content['my_name'], content['my_cards'])
     updateMyCoins(content['my_coins'])
-    updatePlayingPlayers(content['turn'], content['players'])
+    updateTax(content['tax'], content['my_name'])
+    updatePlayingPlayers(content['turn'], content['tax'], content['players'])
+    isUpdating = false
 }
 
-window.setInterval(getGameInfo, 1000);
+window.setInterval(getGameInfo, 1200);

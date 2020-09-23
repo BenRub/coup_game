@@ -41,13 +41,17 @@
 
     </div>
 
-
     <div class="endTurnHolderBox">
         <button id="endTurn" type="button" onclick="endTurn()">End turn</button>
     </div>
 
 
     <div class="my_info">
+
+        <div class="my_tax">
+             <div id="tax_on_me_element" class="tax" draggable="true" ondragstart="dragTaxFromMyself(event)"></div>
+        </div>
+
         <div id="my_cards" class="my_cards" ondrop="dropToCard(event)" ondragover="allowDrop(event)">
 
         </div>
@@ -65,8 +69,17 @@
              ondragover="allowDrop(event)">
             <span id="deckSize"></span>
         </div>
+
+        <div id="tax" class="tax" draggable="true" ondragstart="dragTaxFromBase(event)"
+             ondrop="dropToTaxBase(event)"
+             ondragover="allowDrop(event)">
+
+        </div>
+
         <div class="bank" draggable="true" ondragstart="dragCoinsFromBank(event)" ondrop="dropToBank(event)"
-             ondragover="allowDrop(event)" onclick="takeOneFromBank()"></div>
+             ondragover="allowDrop(event)" onclick="takeOneFromBank()">
+
+        </div>
     </div>
 
     <div id="game_info">

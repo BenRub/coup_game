@@ -1,3 +1,4 @@
+import threading
 import time
 from typing import Optional
 
@@ -21,6 +22,7 @@ def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     game = CoupGame()
+    lock = threading.Lock()
 
     @app.errorhandler(InvalidUsage)
     def handle_invalid_usage(error: InvalidUsage):
@@ -107,13 +109,15 @@ def create_app():
             raise InvalidUsage("Cards names is not list of strings", status_code=400)
         if 'playerToStart' not in content:
             raise InvalidUsage("Player to start not given", status_code=400)
-        game.start(content['cardNames'], content['playerToStart'])
+        with lock:
+            game.start(content['cardNames'], content['playerToStart'])
         return "", 204
 
     @app.route('/end_turn', methods=['POST'])
     def end_turn():
         player = get_player()
-        game.end_turn(player)
+        with lock:
+            game.end_turn(player)
         return "", 200
 
     @app.route('/open_card', methods=['POST'])
@@ -121,12 +125,14 @@ def create_app():
         content = request.json
         if 'cardId' not in content:
             raise InvalidUsage("Card id not given", status_code=400)
-        game.open_card(get_player(), content['cardId'])
+        with lock:
+            game.open_card(get_player(), content['cardId'])
         return "", 200
 
     @app.route('/take_card_from_deck', methods=['POST'])
     def take_card_from_deck():
-        game.take_card_from_deck(get_player())
+        with lock:
+            game.take_card_from_deck(get_player())
         return "", 200
 
     @app.route('/return_card_to_deck', methods=['POST'])
@@ -134,7 +140,8 @@ def create_app():
         content = request.json
         if 'cardId' not in content:
             raise InvalidUsage("Card id not given", status_code=400)
-        game.return_card_to_deck(get_player(), content['cardId'])
+        with lock:
+            game.return_card_to_deck(get_player(), content['cardId'])
         return "", 200
 
     @app.route('/take_from_bank', methods=['POST'])
@@ -142,7 +149,8 @@ def create_app():
         content = request.json
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.take_from_bank(get_player(), int(content['coins']))
+        with lock:
+            game.take_from_bank(get_player(), int(content['coins']))
         return "", 200
 
     @app.route('/pay_to_bank', methods=['POST'])
@@ -150,7 +158,8 @@ def create_app():
         content = request.json
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.pay_to_bank(get_player(), int(content['coins']))
+        with lock:
+            game.pay_to_bank(get_player(), int(content['coins']))
         return "", 200
 
     @app.route('/transfer', methods=['POST'])
@@ -160,7 +169,23 @@ def create_app():
             raise InvalidUsage("Player source not given", status_code=400)
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
-        game.transfer(get_player(), content['player_name_dst'], int(content['coins']))
+        with lock:
+            game.transfer(get_player(), content['player_name_dst'], int(content['coins']))
+        return "", 200
+
+    @app.route('/tax', methods=['POST'])
+    def tax():
+        content = request.json
+        if 'player_name_dst' not in content:
+            raise InvalidUsage("Player source not given", status_code=400)
+        with lock:
+            game.tax(content['player_name_dst'])
+        return "", 200
+
+    @app.route('/return_tax_to_base', methods=['POST'])
+    def return_tax_to_base():
+        with lock:
+            game.return_tax_to_base()
         return "", 200
 
     return app
