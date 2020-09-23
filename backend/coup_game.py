@@ -1,226 +1,233 @@
 from typing import Optional
+import random
+
 from backend.card import Card
 from backend.coup_exception import CoupException
 from backend.player import Player
-import random
 
-CardInstances = 3
-CardsForPlayer = 2
+
+CARD_INSTANCES = 3
+CARDS_FOR_PLAYER = 2
 
 
 class CoupGame:
 
     def __init__(self):
         self.started = False
-        self.gameOver = False
+        self.game_over = False
         self.turn = None
         self.tax = None
-        self.cardsNames = []
+        self.card_names = []
         self.players = {}
         self.deck = []
-        self.playingPlayers = []
+        self.playing_players = []
 
-    def Start(self, cardNames, playerToStart):
-        player = self.getPlayerByName(playerToStart)
+    def start(self, card_names, player_to_start):
+        player = self.get_player_by_name(player_to_start)
         if not player:
-            raise CoupException(f"No player with name {playerToStart}")
+            raise CoupException(f"No player with name {player_to_start}")
 
         self.started = True
-        self.gameOver = False
+        self.game_over = False
         self.turn = player
         self.tax = None
-        self.cardsNames = cardNames
-        self.deck = self.createCards(cardNames)
-        self.shuffleDeck()
+        self.card_names = card_names
+        self.deck = self.create_cards(card_names)
+        self.shuffle_deck()
 
-        if len(self.deck) < CardsForPlayer * len(self.players):
+        if len(self.deck) < CARDS_FOR_PLAYER * len(self.players):
             raise CoupException("There are not enough cards for the players")
 
-        self.playingPlayers = []
-        for _, player in self.players.items():
-            self.playingPlayers.append(player)
-            player.Reset()
+        self.playing_players = []
+        for player in self.players.values():
+            self.playing_players.append(player)
+            player.reset()
 
-        for _ in range(CardsForPlayer):
-            for _, player in self.players.items():
-                player.AddCard(self.deck.pop())
+        for _ in range(CARDS_FOR_PLAYER):
+            for player in self.playing_players:
+                player.add_card(self.deck.pop())
 
-    def PlayerTurn(self):
+    def player_turn(self):
         if self.turn:
-            return self.turn.GetId()
+            return self.turn.id
         return None
 
-    def EndTurn(self, player: Player):
-        if self.gameOver:
+    def end_turn(self, player: Player):
+        if self.game_over:
             return
 
         if self.turn is not player:
             raise CoupException("It's not your turn!")
 
-        exposedPlayersCount = 0
-        self.switchTurn()
-        while self.turn.AllCardsAreExposed():
-            exposedPlayersCount += 1
-            if exposedPlayersCount >= len(self.playingPlayers) - 1:
-                self.gameOver = True
+        exposed_players_count = 0
+        self.switch_turn()
+        while self.turn.is_out():
+            exposed_players_count += 1
+            if exposed_players_count >= len(self.playing_players) - 1:
+                self.game_over = True
                 break
-            self.switchTurn()
+            self.switch_turn()
 
-    def switchTurn(self):
-        playerIndex = 0
-        for player in self.playingPlayers:
+    def switch_turn(self):
+        player_index = 0
+        for player in self.playing_players:
             if player == self.turn:
                 break
-            playerIndex += 1
+            player_index += 1
 
-        if playerIndex + 1 == len(self.playingPlayers):
-            playerIndex = -1
-        self.turn = self.playingPlayers[playerIndex + 1]
+        if player_index + 1 == len(self.playing_players):
+            player_index = -1
+        self.turn = self.playing_players[player_index + 1]
 
-    def GetInfo(self, player):
-        allPlayers = {}
-        for _, user in self.players.items():
-            allPlayers[user.GetName()] = ""
+    def get_info(self, player):
+        all_players = {}
+        for user in self.players.values():
+            all_players[user.name] = ""
 
-        playersInfo = {}
-        for gamePlayer in self.playingPlayers:
-            if player == gamePlayer:
+        players_info = {}
+        for game_player in self.playing_players:
+            if player == game_player:
                 continue
 
             cards = []
-            for _, card in gamePlayer.cards.items():
-                if card.Visible:
-                    cards.append(card.GetName())
+            for card in game_player.cards.values():
+                if card.visible:
+                    cards.append(card.name)
                 else:
                     cards.append("--HIDDEN--")
-            playersInfo[gamePlayer.GetName()] = {}
-            playersInfo[gamePlayer.GetName()]["cards"] = cards
-            playersInfo[gamePlayer.GetName()]["coins"] = gamePlayer.coins
-            playersInfo[gamePlayer.GetName()]["is_ghost"] = gamePlayer.GetId() not in self.players
+            players_info[game_player.name] = {}
+            players_info[game_player.name]["cards"] = cards
+            players_info[game_player.name]["coins"] = game_player.coins
+            players_info[game_player.name]["is_ghost"] = game_player.id not in self.players
 
-        playerCards = {}
-        for _, card in player.cards.items():
-            playerCards[card.GetId()] = {
-                "cardId": card.GetId(),
-                "cardName": card.GetName(),
-                "visible": card.Visible,
+        player_cards = {}
+        for card in player.cards.values():
+            player_cards[card.id] = {
+                "cardId": card.id,
+                "cardName": card.name,
+                "visible": card.visible,
             }
 
-        gameInfo = {
-            "cards_names": self.cardsNames,
+        game_info = {
+            "cards_names": self.card_names,
             "deck_size": len(self.deck),
-            "my_name": player.GetName(),
-            "turn": self.turn.GetName() if self.turn else "",
+            "my_name": player.name,
+            "turn": self.turn.name if self.turn else "",
             "tax": self.tax,
-            "my_cards": playerCards,
+            "my_cards": player_cards,
             "my_coins": player.coins,
-            "players": playersInfo,
-            "all_players": allPlayers
+            "players": players_info,
+            "all_players": all_players
         }
-        return gameInfo
+        return game_info
 
-    def createCards(self, cardNames):
+    @staticmethod
+    def create_cards(card_names):
         cards = []
-        for cardName in cardNames:
-            for _ in range(CardInstances):
-                cards.append(Card(cardName))
+        for card_name in card_names:
+            for _ in range(CARD_INSTANCES):
+                cards.append(Card(card_name))
         return cards
 
-    def shuffleDeck(self):
+    def shuffle_deck(self):
         for _ in range(10):
             random.shuffle(self.deck)
 
-    def KickPlayer(self, playerToKick):
-        player = self.getPlayerByName(playerToKick)
+    def kick_player(self, player_to_kick):
+        player = self.get_player_by_name(player_to_kick)
         if player is None:
-            raise CoupException(f"No player with name {playerToKick}")
+            raise CoupException(f"No player with name {player_to_kick}")
 
-        self.UnregisterPlayer(player)
+        self.unregister_player(player)
 
-    def RegisterPlayer(self, name) -> Player:
-        if self.getPlayerByName(name) is not None:
+    def register_player(self, name) -> Player:
+        if self.get_player_by_name(name) is not None:
             raise CoupException(f"{name} is already in the game")
 
         player = Player(name)
-        self.players[player.GetId()] = player
+        self.players[player.id] = player
         return player
 
-    def UnregisterPlayer(self, player: Player):
-        self.ExposePlayer(player)
-        del self.players[player.GetId()]
+    def unregister_player(self, player: Player):
+        self.expose_player(player)
+        del self.players[player.id]
 
-    def GetPlayer(self, playerId) -> Optional[Player]:
-        if playerId in self.players:
-            return self.players[playerId]
+    def get_player(self, player_id) -> Optional[Player]:
+        if player_id in self.players:
+            return self.players[player_id]
         return None
 
-    def ExposePlayer(self, player: Player):
+    @staticmethod
+    def expose_player(player: Player):
         for _, card in player.cards.items():
-            card.Visible = True
+            card.visible = True
 
-    def getPlayerByName(self, playerName) -> Optional[Player]:
-        for _, player in self.players.items():
-            if player.GetName().lower() == playerName.lower():
+    def get_player_by_name(self, player_name) -> Optional[Player]:
+        for player in self.players.values():
+            if player.name.lower() == player_name.lower():
                 return player
         return None
 
-    def OpenCard(self, player: Player, cardId):
-        card = player.GetCard(cardId)
+    @staticmethod
+    def open_card(player: Player, card_id: int):
+        card = player.get_card(card_id)
         if not card:
-            raise CoupException(f"Player {player.GetName()} does not have card id {cardId}")
-        card.Visible = True
+            raise CoupException(f"Player {player.name} does not have card id {card_id}")
+        card.visible = True
 
-    def TakeCardFromDeck(self, player: Player):
+    def take_card_from_deck(self, player: Player):
         if len(self.deck) <= 0:
             raise CoupException("Deck is empty")
 
         card = self.deck.pop()
-        player.AddCard(card)
+        player.add_card(card)
 
-    def ReturnCardToDeck(self, player: Player, cardId):
-        card = player.PopCard(cardId)
+    def return_card_to_deck(self, player: Player, card_id):
+        card = player.pop_card(card_id)
         if not card:
-            raise CoupException(f"Player {player.GetName()} does not have card id {cardId}")
+            raise CoupException(f"Player {player.name} does not have card id {card_id}")
 
-        card.Visible = False
+        card.visible = False
         self.deck.append(card)
-        self.shuffleDeck()
+        self.shuffle_deck()
 
-    def TakeFromBank(self, player: Player, coins: int):
+    @staticmethod
+    def take_from_bank(player: Player, coins: int):
         if coins < 0:
             raise CoupException(f"Can't take negative amount of coins")
 
         player.coins += coins
 
-    def PayToBank(self, player: Player, coins: int):
+    @staticmethod
+    def pay_to_bank(player: Player, coins: int):
         if coins < 0:
             raise CoupException(f"Can't pay negative amount of coins")
 
         if player.coins < coins:
-            raise CoupException(f"Player {player.GetName()} does not have {coins} coins")
+            raise CoupException(f"Player {player.name} does not have {coins} coins")
 
         player.coins -= coins
 
-    def Transfer(self, player: Player, playerNameDst, coins: int):
+    def transfer(self, player: Player, player_name_dst, coins: int):
         if coins < 0:
             raise CoupException(f"Can't transfer negative amount of coins")
 
-        playerDst = self.getPlayerByName(playerNameDst)
-        if not playerDst:
-            raise CoupException(f"No player with name {playerNameDst}")
+        player_dst = self.get_player_by_name(player_name_dst)
+        if not player_dst:
+            raise CoupException(f"No player with name {player_name_dst}")
 
         if player.coins < coins:
             raise CoupException(f"You don't not have {coins} coins")
 
         player.coins -= coins
-        playerDst.coins += coins
+        player_dst.coins += coins
 
-    def Tax(self, playerNameDst):
-        playerDst = self.getPlayerByName(playerNameDst)
-        if not playerDst:
-            raise CoupException(f"No player with name {playerNameDst}")
+    def tax(self, player_name_dst):
+        player_dst = self.get_player_by_name(player_name_dst)
+        if not player_dst:
+            raise CoupException(f"No player with name {player_name_dst}")
 
-        self.tax = playerNameDst
+        self.tax = player_name_dst
 
-    def ReturnTaxToBase(self):
+    def return_tax_to_base(self):
         self.tax = None

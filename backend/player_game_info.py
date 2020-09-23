@@ -1,6 +1,6 @@
 class PlayerGameInfo:
 
-    def __init__(self, name, playerCards, coins):
+    def __init__(self, name, player_cards, coins):
         self.name = name
-        self.playerCards = playerCards
+        self.players_cards = player_cards
         self.coins = coins
