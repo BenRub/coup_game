@@ -14,11 +14,12 @@ body {
     -ms-user-select: none;
     user-select: none;
     width: 80%;
-    height: 80%;
+    height: 150%;
     background: white;
     border: 1px solid black;
     border-radius: 2px;
     bottom: 10%;
+    top: 10%;
     left: 10%;
     z-index: 100;
 }
