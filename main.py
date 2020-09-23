@@ -179,7 +179,7 @@ def create_app():
         if 'player_name_dst' not in content:
             raise InvalidUsage("Player source not given", status_code=400)
         with lock:
-            game.tax(content['player_name_dst'])
+            game.tax_player(content['player_name_dst'])
         return "", 200
 
     @app.route('/return_tax_to_base', methods=['POST'])

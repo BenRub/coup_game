@@ -222,7 +222,7 @@ class CoupGame:
         player.coins -= coins
         player_dst.coins += coins
 
-    def tax(self, player_name_dst):
+    def tax_player(self, player_name_dst):
         player_dst = self.get_player_by_name(player_name_dst)
         if not player_dst:
             raise CoupException(f"No player with name {player_name_dst}")
