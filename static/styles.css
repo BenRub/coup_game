@@ -163,25 +163,78 @@ body {
     margin: 15px;
 }
 
+.banker {
+    background-image: url("/static/cards_images/banker.png");
+}
+
 .capitalist {
-    background-image: url("/static/cards_images/capitalist.jpeg");
+    background-image: url("/static/cards_images/capitalist.png");
 }
 
 .communist {
-    background-image: url("/static/cards_images/communist.jpeg");
+    background-image: url("/static/cards_images/communist.png");
 }
 
-.guerrilla {
-    background-image: url("/static/cards_images/guerrilla.jpeg");
-}
-
-.protester {
-    background-image: url("/static/cards_images/protester.jpeg");
+.crimeboss {
+    background-image: url("/static/cards_images/crimeboss.png");
 }
 
 .director {
-    background-image: url("/static/cards_images/director.jpeg");
+    background-image: url("/static/cards_images/director.png");
 }
+
+.farmer {
+    background-image: url("/static/cards_images/farmer.png");
+}
+
+.guerrilla {
+    background-image: url("/static/cards_images/guerrilla.png");
+}
+
+.judge {
+    background-image: url("/static/cards_images/judge.png");
+}
+
+.mercenary {
+    background-image: url("/static/cards_images/mercenary.png");
+}
+
+.newscaster {
+    background-image: url("/static/cards_images/newscaster.png");
+}
+
+.politician {
+    background-image: url("/static/cards_images/politician.png");
+}
+
+.priest {
+    background-image: url("/static/cards_images/priest.png");
+}
+
+.producer {
+    background-image: url("/static/cards_images/producer.png");
+}
+
+.protester {
+    background-image: url("/static/cards_images/protester.png");
+}
+
+.reporter {
+    background-image: url("/static/cards_images/reporter.png");
+}
+
+.speculator {
+    background-image: url("/static/cards_images/speculator.png");
+}
+
+.spy {
+    background-image: url("/static/cards_images/spy.png");
+}
+
+.writer {
+    background-image: url("/static/cards_images/writer.png");
+}
+
 
 .--hidden-- {
     background-image: url("/static/cards_images/--hidden--.jpeg");

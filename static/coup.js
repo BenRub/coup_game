@@ -3,7 +3,22 @@ let cardsToSelect = {
     "communist": true,
     "guerrilla": true,
     "protester": true,
-    "director": true
+    "director": true,
+
+    "banker": false,
+    "crimeboss": false,
+    "farmer": false,
+    "judge": false,
+    "mercenary": false,
+    "newscaster": false,
+    "peacekeeper": false,
+    "politician": false,
+    "priest": false,
+    "producer": false,
+    "reporter": false,
+    "speculator": false,
+    "spy": false,
+    "writer": false,
 }
 
 let cardsCreated = false
@@ -31,7 +46,7 @@ function createAllCards() {
         let tdElem = document.createElement("td")
         let imgElem = document.createElement("img")
         imgElem.title = cardName
-        imgElem.src = "/static/cards_descriptions/" + cardName + ".jpeg"
+        imgElem.src = "/static/cards_descriptions/" + cardName + ".png"
         if (cardsToSelect[cardName]) {
             imgElem.className = "selected"
         }
