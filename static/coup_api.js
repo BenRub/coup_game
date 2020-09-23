@@ -46,6 +46,10 @@ async function transfer(player_name_dst, coins) {
     await sendRequest('/transfer', {"player_name_dst": player_name_dst, "coins": coins})
 }
 
+async function transferCard(player_name_dst, card_id) {
+    await sendRequest('/transfer_card', {"player_name_dst": player_name_dst, "card_id": card_id})
+}
+
 async function tax(player_name_dst) {
     await sendRequest('/tax', {"player_name_dst": player_name_dst})
 }

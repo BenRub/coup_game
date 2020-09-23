@@ -229,5 +229,16 @@ class CoupGame:
 
         self.tax = player_name_dst
 
+    def transfer_card(self, from_player: Player, player_name_dst: str, card_id: int):
+        dst_player = self.get_player_by_name(player_name_dst)
+        if not dst_player:
+            raise CoupException(f"No player with name {player_name_dst}")
+
+        if card_id not in from_player.cards:
+            raise CoupException(f"{from_player.name} does not have card id {card_id}")
+
+        from_player.cards.pop(card_id)
+        dst_player.cards[card_id] = self.deck[card_id]
+
     def return_tax_to_base(self):
         self.tax = None

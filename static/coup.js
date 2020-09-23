@@ -90,6 +90,10 @@ function dragCardFromDeck(ev) {
     ev.dataTransfer.setData("fromDeck", "yes");
 }
 
+function dragCardToPlayer(ev) {
+    ev.dataTransfer.setData("cardId", ev.target.title);
+}
+
 function dragTaxFromBase(ev) {
     ev.dataTransfer.setData("taxFromBase", "yes");
 }
@@ -161,7 +165,7 @@ async function dropToBank(ev) {
 
 async function dropToPlayer(enemyPlayer, ev) {
     ev.preventDefault();
-
+    debugger
     if (ev.dataTransfer.getData("coinsFromMyself") === "yes") {
         let coins = prompt("How many coins you want to transfer to " + enemyPlayer + "?", "0");
         if (coins != null) {
@@ -169,7 +173,11 @@ async function dropToPlayer(enemyPlayer, ev) {
         }
     } else if (ev.dataTransfer.getData("taxFromBase") === "yes" || ev.dataTransfer.getData("taxFromMyself") === "yes") {
         await tax(enemyPlayer)
+    } else if (ev.dataTransfer.getData("cardId")) {
+        let is_sure = prompt("Are you sure you want to transfer this file?");
+        if (is_sure === true) {
+            await transferCard(enemyPlayer, ev.dataTransfer.getData("cardId"))
+        }
     }
-
 
 }
