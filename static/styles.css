@@ -162,6 +162,7 @@ body {
     background-repeat: no-repeat;
     background-size: contain;
     margin: 15px;
+    color: transparent;
 }
 
 .banker {
