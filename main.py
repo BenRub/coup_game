@@ -173,15 +173,6 @@ def create_app():
             game.transfer(get_player(), content['player_name_dst'], int(content['coins']))
         return "", 200
 
-    @app.route('/tax', methods=['POST'])
-    def tax():
-        content = request.json
-        if 'player_name_dst' not in content:
-            raise InvalidUsage("Player source not given", status_code=400)
-        with lock:
-            game.tax_player(content['player_name_dst'])
-        return "", 200
-
     @app.route('/transfer_card', methods=['POST'])
     def transfer_card():
         content = request.json
@@ -189,6 +180,15 @@ def create_app():
             raise InvalidUsage("Missing params", status_code=400)
         with lock:
             game.transfer_card(get_player(), content['player_name_dst'], int(content['card_id']))
+        return "", 200
+
+    @app.route('/tax', methods=['POST'])
+    def tax():
+        content = request.json
+        if 'player_name_dst' not in content:
+            raise InvalidUsage("Player source not given", status_code=400)
+        with lock:
+            game.tax_player(content['player_name_dst'])
         return "", 200
 
     @app.route('/return_tax_to_base', methods=['POST'])

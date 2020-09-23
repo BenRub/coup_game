@@ -60,7 +60,7 @@ function updateMyCards(turn, myName, myCardsJson) {
             cardElement = document.createElement("div")
             cardElement.title = cardId
             cardElement.draggable = true
-            cardElement.ondragstart = dragCardToDeck
+            cardElement.ondragstart = dragCardFromMyself
             myCardsElements[cardId] = cardElement
             getMyCardsElem().appendChild(cardElement)
         }
