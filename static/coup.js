@@ -169,7 +169,7 @@ async function dropToPlayer(enemyPlayer, ev) {
     } else if (ev.dataTransfer.getData("taxFromBase") === "yes" || ev.dataTransfer.getData("taxFromMyself") === "yes") {
         await tax(enemyPlayer)
     } else if ( ev.dataTransfer.getData("cardId") !== "" ) {
-        if (prompt("Are you sure you want to transfer this card?")) {
+        if (confirm("Are you sure you want to transfer this card?")) {
             await transferCard(enemyPlayer, ev.dataTransfer.getData("cardId"))
         }
     }
