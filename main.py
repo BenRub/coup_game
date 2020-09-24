@@ -166,11 +166,22 @@ def create_app():
     def transfer():
         content = request.json
         if 'player_name_dst' not in content:
-            raise InvalidUsage("Player source not given", status_code=400)
+            raise InvalidUsage("Player destination not given", status_code=400)
         if 'coins' not in content:
             raise InvalidUsage("Coins not given", status_code=400)
         with lock:
             game.transfer(get_player(), content['player_name_dst'], int(content['coins']))
+        return "", 200
+
+    @app.route('/transfer_card', methods=['POST'])
+    def transfer_card():
+        content = request.json
+        if 'player_name_dst' not in content:
+            raise InvalidUsage("Player destination not given", status_code=400)
+        if 'card_id' not in content:
+            raise InvalidUsage("Card id not given", status_code=400)
+        with lock:
+            game.transfer_card(get_player(), content['player_name_dst'], content['card_id'])
         return "", 200
 
     @app.route('/tax', methods=['POST'])

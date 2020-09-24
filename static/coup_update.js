@@ -58,11 +58,12 @@ function updateMyCards(turn, myName, myCardsJson) {
             cardElement = myCardsElements[cardId]
         } else {
             cardElement = document.createElement("div")
-            cardElement.title = cardId
             cardElement.draggable = true
-            cardElement.ondragstart = dragCardToDeck
             myCardsElements[cardId] = cardElement
             getMyCardsElem().appendChild(cardElement)
+        }
+        cardElement.ondragstart = function (ev) {
+            dragCardFromMyself(ev, myCard)
         }
 
         cardElement.className = "card " + myCard["cardName"].toLowerCase()
@@ -191,6 +192,7 @@ function updatePlayingPlayers(turn, tax, playersJson) {
 }
 
 let isUpdating = false
+
 async function getGameInfo() {
     const response = await fetch("/game_info", {method: 'GET'})
     if (!response.ok) {

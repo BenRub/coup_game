@@ -222,6 +222,18 @@ class CoupGame:
         player.coins -= coins
         player_dst.coins += coins
 
+    def transfer_card(self, from_player: Player, player_name_dst: str, card_id: int):
+        dst_player = self.get_player_by_name(player_name_dst)
+        if not dst_player:
+            raise CoupException(f"No player with name {player_name_dst}")
+
+        if card_id not in from_player.cards:
+            raise CoupException(f"{from_player.name} does not have card id {card_id}")
+
+        card = from_player.cards[card_id]
+        del from_player.cards[card_id]
+        dst_player.cards[card_id] = card
+
     def tax_player(self, player_name_dst):
         player_dst = self.get_player_by_name(player_name_dst)
         if not player_dst:
