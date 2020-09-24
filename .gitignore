@@ -7,3 +7,5 @@ venv
 /.idea/vcs.xml
 deploy*
 OfirAWS.pem
+/.idea/shelf/sd.xml
+/.idea/shelf/sd/shelved.patch
