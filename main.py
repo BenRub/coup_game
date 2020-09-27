@@ -37,7 +37,7 @@ def create_app():
         if logged_in():
             try:
                 player = get_player()
-                return render_template('hello.html', name=player.name, appTimestamp=app_timestamp)
+                return render_template('coup.html', name=player.name, appTimestamp=app_timestamp)
             except InvalidUsage:
                 pass
         return redirect(url_for('login'))
