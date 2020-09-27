@@ -184,24 +184,28 @@ def create_app():
             game.transfer_card(get_player(), content['player_name_dst'], content['card_id'])
         return "", 200
 
-    @app.route('/tax', methods=['POST'])
-    def tax():
+    @app.route('/move_token', methods=['POST'])
+    def move_token():
         content = request.json
-        if 'player_name_dst' not in content:
-            raise InvalidUsage("Player source not given", status_code=400)
-        with lock:
-            game.tax_player(content['player_name_dst'])
-        return "", 200
+        if 'token_name' not in content:
+            raise InvalidUsage("Token name not given", status_code=400)
+        if 'token_index' not in content:
+            raise InvalidUsage("Token index not given", status_code=400)
 
-    @app.route('/return_tax_to_base', methods=['POST'])
-    def return_tax_to_base():
-        with lock:
-            game.return_tax_to_base()
+        player_name_dst = None
+        if 'player_name_dst' in content:
+            player_name_dst = content['player_name_dst']
+        try:
+            token_index = int(content['token_index'])
+            with lock:
+                game.move_token(content['token_name'], token_index, player_name_dst)
+        except Exception:
+            raise InvalidUsage("Token index should be a number", status_code=400)
+
         return "", 200
 
     return app
 
 
 if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True, host="0.0.0.0", port=8000)
+    create_app().run(debug=True, host="0.0.0.0", port=8000)

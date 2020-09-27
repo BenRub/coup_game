@@ -119,10 +119,11 @@ body {
     justify-content: space-between;
 }
 
-.my_tax {
-    margin-left: 22%;
-    width: 121px;
+#my_tokens {
+    width: 60%;
+    margin: auto;
     display: flex;
+    justify-items: center;
     align-items: center;
 }
 
@@ -145,7 +146,7 @@ body {
     border: 1px solid gray;
     background-color: #efefef;
     border-radius: 8px;
-    margin-left: 5%;
+    margin-left: 30%;
     width: 40%;
     display: flex;
     flex-direction: row;
@@ -247,7 +248,7 @@ body {
 }
 
 .deck_and_bank {
-    width: 40%;
+    width: 100%;
     margin: 20px auto auto;
     display: flex;
     flex-direction: row;
@@ -259,11 +260,11 @@ body {
     background-image: url("/static/deck.jpeg");
     background-repeat: no-repeat;
     background-size: contain;
-    width: 215px;
+    background-position: right;
+    direction: rtl;
+    width: 25%;
     height: 275px;
     display: flex;
-    justify-content: center;
-    align-content: center;
     font-size: 30px;
     color: deeppink;
 }
@@ -271,28 +272,43 @@ body {
 .deck_and_bank .deck span {
     height: 40px;
     align-self: center;
+    margin-right: 5%;
 }
 
-.tax {
+.token {
+    background-image: none;
     background-repeat: no-repeat;
     background-size: contain;
     width: 121px;
     height: 127px;
 }
 
-.tax_full {
+.tax {
     background-image: url("/static/tax.png");
 }
 
-.tax_empty {
-    background-image: none;
+.treaty {
+    background-image: url("/static/treaty.png");
+}
+
+.peacekeeper {
+    background-image: url("/static/peacekeeper.png");
+}
+
+.disappear {
+    background-image: url("/static/disappear.png");
+}
+
+#base_tokens {
+    width: 50%;
+    display: flex;
 }
 
 .deck_and_bank .bank {
     background-image: url("/static/bank_new.png");
     background-repeat: no-repeat;
     background-size: contain;
-    width: 275px;
+    width: 25%;
     height: 230px;
 }
 
@@ -317,6 +333,10 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+}
+
+#playing_players .enemy_tokens_box {
+    display: flex;
 }
 
 #playing_players .turn {

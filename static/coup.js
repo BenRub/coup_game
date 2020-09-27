@@ -92,12 +92,22 @@ function dragCardFromDeck(ev) {
     ev.dataTransfer.setData("fromDeck", "yes");
 }
 
-function dragTaxFromBase(ev) {
-    ev.dataTransfer.setData("taxFromBase", "yes");
+function dragTokenFromBase(ev, token, index) {
+    ev.dataTransfer.setData("tokenFromBase", "yes");
+    ev.dataTransfer.setData("tokenName", token);
+    ev.dataTransfer.setData("tokenIndex", index + "");
 }
 
-function dragTaxFromEnemy(ev) {
-    ev.dataTransfer.setData("taxFromEnemy", "yes");
+function dragTokenFromMyself(ev, token, index) {
+    ev.dataTransfer.setData("tokenFromMyself", "yes");
+    ev.dataTransfer.setData("tokenName", token);
+    ev.dataTransfer.setData("tokenIndex", index + "");
+}
+
+function dragTokenFromEnemy(ev, token, index) {
+    ev.dataTransfer.setData("tokenFromEnemy", "yes");
+    ev.dataTransfer.setData("tokenName", token);
+    ev.dataTransfer.setData("tokenIndex", index + "");
 }
 
 function dragCoinsFromBank(ev) {
@@ -106,10 +116,6 @@ function dragCoinsFromBank(ev) {
 
 function dragCoinsFromMyself(ev) {
     ev.dataTransfer.setData("coinsFromMyself", "yes");
-}
-
-function dragTaxFromMyself(ev) {
-    ev.dataTransfer.setData("taxFromMyself", "yes");
 }
 
 async function dropToCard(ev) {
@@ -141,12 +147,14 @@ async function dropToDeck(ev) {
     await returnCardToDeck(cardId)
 }
 
-async function dropToTaxBase(ev) {
+async function dropTokenToBase(ev) {
     ev.preventDefault();
-    if (ev.dataTransfer.getData("taxFromEnemy") !== "yes" && ev.dataTransfer.getData("taxFromMyself") !== "yes") {
+    if (ev.dataTransfer.getData("tokenFromEnemy") !== "yes" && ev.dataTransfer.getData("tokenFromMyself") !== "yes") {
         return
     }
-    await returnTaxToBase()
+    let tokenName = ev.dataTransfer.getData("tokenName")
+    let tokenIndex = ev.dataTransfer.getData("tokenIndex")
+    await moveTokenToBase(tokenName, tokenIndex)
 }
 
 async function dropToBank(ev) {
@@ -168,14 +176,21 @@ async function dropToPlayer(enemyPlayer, ev) {
         if (coins != null) {
             await transfer(enemyPlayer, coins)
         }
-    } else if (ev.dataTransfer.getData("taxFromBase") === "yes" || ev.dataTransfer.getData("taxFromMyself") === "yes") {
-        await tax(enemyPlayer)
-    } else if ( ev.dataTransfer.getData("cardId") !== "" ) {
+    } else if (ev.dataTransfer.getData("tokenFromBase") === "yes" || ev.dataTransfer.getData("tokenFromMyself") === "yes") {
+        let tokenName = ev.dataTransfer.getData("tokenName")
+        let tokenIndex = ev.dataTransfer.getData("tokenIndex")
+        await moveTokenToPlayer(enemyPlayer, tokenName, tokenIndex)
+    } else if (ev.dataTransfer.getData("cardId") !== "") {
         let cardName = ev.dataTransfer.getData("cardName")
         let exposedStr = ev.dataTransfer.getData("cardVisible") === "yes" ? "exposed " : ""
         if (confirm("Are you sure you want to transfer your " + exposedStr + cardName + " card?")) {
             await transferCard(enemyPlayer, ev.dataTransfer.getData("cardId"))
         }
     }
+}
 
+function onPageLoad() {
+    createMyTokens()
+    createBaseTokens()
+    window.setInterval(getGameInfo, 1200);
 }

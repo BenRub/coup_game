@@ -1,10 +1,16 @@
 <!doctype html>
-<title>Hello from Flask</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ appTimestamp }}">
-<script type="text/javascript" src="{{ url_for('static', filename='elements.js') }}?v={{ appTimestamp }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='coup_api.js') }}?v={{ appTimestamp }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='coup_update.js') }}?v={{ appTimestamp }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
+<head>
+    <title>Hello from Flask</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ appTimestamp }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='elements.js') }}?v={{ appTimestamp }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='role_tokens.js') }}?v={{ appTimestamp }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='coup_api.js') }}?v={{ appTimestamp }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='coup_update.js') }}?v={{ appTimestamp }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='coup.js') }}?v={{ appTimestamp }}"></script>
+</head>
+<body onload="onPageLoad()">
 
 <div id="allCards" class="allCardsClosed">
     <div style="margin: auto;width:80px;color:blue;" onclick="closeCardsPopup()">Close</div>
@@ -45,13 +51,11 @@
         <button id="endTurn" type="button" onclick="endTurn()">End turn</button>
     </div>
 
+    <div id="my_tokens">
+
+    </div>
 
     <div class="my_info">
-
-        <div class="my_tax">
-             <div id="tax_on_me_element" class="tax" draggable="true" ondragstart="dragTaxFromMyself(event)"></div>
-        </div>
-
         <div id="my_cards" class="my_cards" ondrop="dropToCard(event)" ondragover="allowDrop(event)">
 
         </div>
@@ -70,9 +74,7 @@
             <span id="deckSize"></span>
         </div>
 
-        <div id="tax" class="tax" draggable="true" ondragstart="dragTaxFromBase(event)"
-             ondrop="dropToTaxBase(event)"
-             ondragover="allowDrop(event)">
+        <div id="base_tokens" ondrop="dropTokenToBase(event)" ondragover="allowDrop(event)">
 
         </div>
 
@@ -92,3 +94,4 @@
 
 </div>
 
+</body>

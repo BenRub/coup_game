@@ -99,21 +99,33 @@ function updateMyCoins(myCoins) {
     }
 }
 
-function updateTax(tax, myName) {
-    if (tax) {
-        getTaxElement().className = "tax tax_empty"
-    } else {
-        getTaxElement().className = "tax tax_full"
-    }
+function updateTokens(tokens, myName) {
+    for (let tokenType in roleTokens) {
+        for (let index = 0; index < roleTokens[tokenType]; index++) {
+            if (!(tokenType in tokens)) {
+                continue
+            }
 
-    if (tax === myName) {
-        getTaxOnMeElement().className = "tax tax_full"
-    } else {
-        getTaxOnMeElement().className = "tax"
+            if (tokens[tokenType].length <= index) {
+                continue
+            }
+
+            if (!tokens[tokenType][index]) {
+                baseTokensElements[tokenType + index].className = "token " + tokenType
+            } else {
+                baseTokensElements[tokenType + index].className = "token"
+            }
+
+            if (tokens[tokenType][index] === myName) {
+                myTokensElements[tokenType + index].className = "token " + tokenType
+            } else {
+                myTokensElements[tokenType + index].className = "token"
+            }
+        }
     }
 }
 
-function updatePlayingPlayers(turn, tax, playersJson) {
+function updatePlayingPlayers(turn, tokens, playersJson) {
     getPlayingPlayersElem().innerHTML = ''
 
     for (let playerName in playersJson) {
@@ -144,13 +156,32 @@ function updatePlayingPlayers(turn, tax, playersJson) {
         }
         playingPlayerBox.appendChild(playerNameDiv)
 
-        let taxDiv = document.createElement("div")
-        if (tax === playerName) {
-            taxDiv.className += "tax tax_full"
+        let enemyTokensBox = document.createElement("div")
+        enemyTokensBox.className = "enemy_tokens_box"
+        for (let tokenType in roleTokens) {
+            for (let index = 0; index < roleTokens[tokenType]; index++) {
+                if (!(tokenType in tokens)) {
+                    continue
+                }
+
+                if (tokens[tokenType].length <= index) {
+                    continue
+                }
+
+                if (tokens[tokenType][index] !== playerName) {
+                    continue
+                }
+
+                let enemyTokenTypeElement = document.createElement("div")
+                enemyTokenTypeElement.className = "token " + tokenType
+                enemyTokenTypeElement.draggable = true
+                enemyTokenTypeElement.ondragstart = function (ev) {
+                    dragTokenFromEnemy(ev, tokenType, index)
+                }
+                enemyTokensBox.appendChild(enemyTokenTypeElement)
+            }
         }
-        taxDiv.draggable = true
-        taxDiv.ondragstart = dragTaxFromEnemy
-        playingPlayerBox.appendChild(taxDiv)
+        playingPlayerBox.appendChild(enemyTokensBox)
 
         let playerCardsDiv = document.createElement("div")
         playerCardsDiv.className = "player_cards"
@@ -200,9 +231,7 @@ async function getGameInfo() {
             window.location = "/"
         }
     }
-    while (isUpdating) {
-
-    }
+    while (isUpdating) {}
     isUpdating = true
     let content = await response.json()
     updateAllPlayersNames(content['all_players'])
@@ -211,9 +240,7 @@ async function getGameInfo() {
     updateEndTurnAccess(content['turn'], content['my_name'])
     updateMyCards(content['turn'], content['my_name'], content['my_cards'])
     updateMyCoins(content['my_coins'])
-    updateTax(content['tax'], content['my_name'])
-    updatePlayingPlayers(content['turn'], content['tax'], content['players'])
+    updateTokens(content['tokens'], content['my_name'])
+    updatePlayingPlayers(content['turn'], content['tokens'], content['players'])
     isUpdating = false
 }
-
-window.setInterval(getGameInfo, 1200);

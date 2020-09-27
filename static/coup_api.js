@@ -50,12 +50,12 @@ async function transferCard(player_name_dst, card_id) {
     await sendRequest('/transfer_card', {"player_name_dst": player_name_dst, "card_id": card_id})
 }
 
-async function tax(player_name_dst) {
-    await sendRequest('/tax', {"player_name_dst": player_name_dst})
+async function moveTokenToPlayer(player_name_dst, tokenName, tokenIndex) {
+    await sendRequest('/move_token', {"player_name_dst": player_name_dst, "token_name": tokenName, "token_index": parseInt(tokenIndex)})
 }
 
-async function returnTaxToBase() {
-    await sendRequest('/return_tax_to_base')
+async function moveTokenToBase(tokenName, tokenIndex) {
+    await sendRequest('/move_token', {"token_name": tokenName, "token_index": parseInt(tokenIndex)})
 }
 
 async function takeCardFromDeck() {

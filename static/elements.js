@@ -6,22 +6,6 @@ function getCbListOfPlayers() {
     return cbListOfPlayers
 }
 
-let taxElement = undefined
-function getTaxElement() {
-    if (taxElement === undefined) {
-        taxElement = document.getElementById("tax")
-    }
-    return taxElement
-}
-
-let taxOnMeElement = undefined
-function getTaxOnMeElement() {
-    if (taxOnMeElement === undefined) {
-        taxOnMeElement = document.getElementById("tax_on_me_element")
-    }
-    return taxOnMeElement
-}
-
 let deckSizeElement = undefined
 function getDeckSizeElement() {
     if (deckSizeElement === undefined) {
@@ -46,6 +30,22 @@ function getEndTurnButtonElement() {
     }
 
     return endTurnButtonElement
+}
+
+let baseTokensElement = undefined
+function getBaseTokensElement() {
+    if (baseTokensElement === undefined) {
+        baseTokensElement = document.getElementById("base_tokens")
+    }
+    return baseTokensElement
+}
+
+let myTokensElement = undefined
+function getMyTokensElement() {
+    if (myTokensElement === undefined) {
+        myTokensElement = document.getElementById("my_tokens")
+    }
+    return myTokensElement
 }
 
 let myCardsElem = undefined

@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, Dict
 import random
 
 from backend.card import Card
 from backend.coup_exception import CoupException
 from backend.player import Player
-
+from backend.role_token import RoleToken
 
 CARD_INSTANCES = 3
 CARDS_FOR_PLAYER = 2
@@ -16,11 +16,23 @@ class CoupGame:
         self.started = False
         self.game_over = False
         self.turn = None
-        self.tax = None
+        self._tokens = self._create_tokens()
         self.card_names = []
         self.players = {}
         self.deck = []
         self.playing_players = []
+
+    def _create_tokens(self) -> Dict[str, RoleToken]:
+        tokens = [
+            RoleToken("tax", 2),
+            RoleToken("treaty", 2),
+            RoleToken("peacekeeper", 2),
+            RoleToken("disappear", 3)
+        ]
+        tokensMap = {}
+        for token in tokens:
+            tokensMap[token.get_name()] = token
+        return tokensMap
 
     def start(self, card_names, player_to_start):
         player = self.get_player_by_name(player_to_start)
@@ -30,7 +42,7 @@ class CoupGame:
         self.started = True
         self.game_over = False
         self.turn = player
-        self.tax = None
+        [token.reset() for token in self._tokens.values()]
         self.card_names = card_names
         self.deck = self.create_cards(card_names)
         self.shuffle_deck()
@@ -39,9 +51,7 @@ class CoupGame:
             raise CoupException("There are not enough cards for the players")
 
         self.playing_players = []
-        for player in self.players.values():
-            self.playing_players.append(player)
-            player.reset()
+        [self.playing_players.append(player) and player.reset() for player in self.players.values()]
 
         for _ in range(CARDS_FOR_PLAYER):
             for player in self.playing_players:
@@ -100,21 +110,13 @@ class CoupGame:
             players_info[game_player.name]["coins"] = game_player.coins
             players_info[game_player.name]["is_ghost"] = game_player.id not in self.players
 
-        player_cards = {}
-        for card in player.cards.values():
-            player_cards[card.id] = {
-                "cardId": card.id,
-                "cardName": card.name,
-                "visible": card.visible,
-            }
-
         game_info = {
             "cards_names": self.card_names,
             "deck_size": len(self.deck),
             "my_name": player.name,
             "turn": self.turn.name if self.turn else "",
-            "tax": self.tax,
-            "my_cards": player_cards,
+            "tokens": {name: token.get_values() for name, token in self._tokens.items()},
+            "my_cards": {card.id: card.to_dict() for card in player.cards.values()},
             "my_coins": player.coins,
             "players": players_info,
             "all_players": all_players
@@ -234,12 +236,11 @@ class CoupGame:
         del from_player.cards[card_id]
         dst_player.cards[card_id] = card
 
-    def tax_player(self, player_name_dst):
-        player_dst = self.get_player_by_name(player_name_dst)
-        if not player_dst:
+    def move_token(self, token_name: str, token_index: int, player_name_dst: Optional[str]):
+        if token_name not in self._tokens:
+            raise CoupException(f"No token with name {token_name}")
+
+        if player_name_dst is not None and not self.get_player_by_name(player_name_dst):
             raise CoupException(f"No player with name {player_name_dst}")
 
-        self.tax = player_name_dst
-
-    def return_tax_to_base(self):
-        self.tax = None
+        self._tokens[token_name].set_token_position(token_index, player_name_dst)
