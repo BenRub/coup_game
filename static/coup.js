@@ -193,4 +193,11 @@ function onPageLoad() {
     createMyTokens()
     createBaseTokens()
     window.setInterval(getGameInfo, 1200);
+    document.onkeydown = onKeyDown
+}
+
+function onKeyDown(e) {
+    if (e.key === "Escape") {
+        closeCardsPopup()
+    }
 }
