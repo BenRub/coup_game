@@ -10,7 +10,9 @@ async function sendRequest(url, data=undefined, changeButton=true) {
     if (!response.ok) {
         let message = await response.text()
         alert(message)
-    } else if (changeButton && getEndTurnButtonElement().disabled !== "disabled") {
+    } else if (changeButton && !getEndTurnButtonElement().disabled) {
+        console.log(getEndTurnButtonElement())
+        console.log(getEndTurnButtonElement().disabled)
         getEndTurnButtonElement().className = "pressMe"
     }
 }
@@ -47,19 +49,19 @@ async function transfer(player_name_dst, coins) {
 }
 
 async function transferCard(player_name_dst, card_id) {
-    await sendRequest('/transfer_card', {"player_name_dst": player_name_dst, "card_id": card_id})
+    await sendRequest('/transfer_card', {"player_name_dst": player_name_dst, "card_id": card_id}, false)
 }
 
 async function moveTokenToPlayer(player_name_dst, tokenName, tokenIndex) {
-    await sendRequest('/move_token', {"player_name_dst": player_name_dst, "token_name": tokenName, "token_index": parseInt(tokenIndex)})
+    await sendRequest('/move_token', {"player_name_dst": player_name_dst, "token_name": tokenName, "token_index": parseInt(tokenIndex)}, false)
 }
 
 async function moveTokenToBase(tokenName, tokenIndex) {
-    await sendRequest('/move_token', {"token_name": tokenName, "token_index": parseInt(tokenIndex)})
+    await sendRequest('/move_token', {"token_name": tokenName, "token_index": parseInt(tokenIndex)}, false)
 }
 
 async function takeCardFromDeck() {
-    await sendRequest('/take_card_from_deck')
+    await sendRequest('/take_card_from_deck', undefined, false)
 }
 
 async function returnCardToDeck(cardId) {

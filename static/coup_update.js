@@ -30,10 +30,10 @@ function updateCardsNamesThatAreBeingPlayed(cards_names) {
 
 function updateEndTurnAccess(turn, myName) {
     if (turn === myName) {
-        getEndTurnButtonElement().disabled = ""
+        getEndTurnButtonElement().disabled = false
     } else {
         getEndTurnButtonElement().className = ""
-        getEndTurnButtonElement().disabled = "disabled"
+        getEndTurnButtonElement().disabled = true
     }
 }
 
