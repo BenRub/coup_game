@@ -33,4 +33,4 @@ class Player:
         return card_to_pop
 
     def is_out(self) -> bool:
-        return not any([card.visible for card in self.cards.values()])
+        return all([card.visible for card in self.cards.values()])

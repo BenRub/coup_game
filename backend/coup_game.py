@@ -51,7 +51,9 @@ class CoupGame:
             raise CoupException("There are not enough cards for the players")
 
         self.playing_players = []
-        [self.playing_players.append(player) and player.reset() for player in self.players.values()]
+        for player in self.players.values():
+            self.playing_players.append(player)
+            player.reset()
 
         for _ in range(CARDS_FOR_PLAYER):
             for player in self.playing_players:
